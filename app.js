@@ -3,6 +3,9 @@ const mongoose = require("mongoose");
 
 require("dotenv").config();
 
+// auth routes
+const authRoutes = require("./routes/auth");
+
 // where to run server
 const port = process.env.PORT || 8000;
 const ROOT_URL = `http://localhost:${port}`;
@@ -17,6 +20,12 @@ const options = {
   useFindAndModify: false,
   useUnifiedTopology: true,
 };
+
+// parses all incoming json data
+app.use(express.json());
+
+// use routes
+app.use("/api/v1/auth", authRoutes);
 
 mongoose
   .connect(MONGO_URL, options)

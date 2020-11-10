@@ -1,6 +1,9 @@
 # dependencies
 /node_modules
 
+# vscode
+/.vscode
+
 # local env files
 .env
 .env.local
