@@ -1,4 +1,7 @@
 const express = require("express");
+const mongoose = require("mongoose");
+
+require("dotenv").config();
 
 // where to run server
 const port = process.env.PORT || 8000;
@@ -6,9 +9,23 @@ const ROOT_URL = `http://localhost:${port}`;
 
 const app = express();
 
-app.listen(port, (err) => {
-  if (err) {
-    throw err;
-  }
-  console.log(`> Ready on ${ROOT_URL}`);
-});
+// database options
+const MONGO_URL = process.env.MONGO_URL;
+const options = {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true,
+};
+
+mongoose
+  .connect(MONGO_URL, options)
+  .then(() => {
+    app.listen(port, (err) => {
+      if (err) {
+        throw err;
+      }
+      console.log(`> Ready on ${ROOT_URL}`);
+    });
+  })
+  .catch((err) => console.log(err));
