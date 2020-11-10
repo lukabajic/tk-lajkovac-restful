@@ -1,0 +1,9 @@
+{
+  "name": "tk-lajkovac-restful",
+  "version": "1.0.0",
+  "description": "Backend (RESTful API) for tklajkovac.rs",
+  "main": "app.js",
+  "repository": "https://github.com/lukabajic/tk-lajkovac-restful.git",
+  "author": "Luka Bajic",
+  "license": "MIT"
+}
