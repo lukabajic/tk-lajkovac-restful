@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
 
@@ -22,10 +23,22 @@ exports.register = async (req, res, next) => {
     const user = new User({ email, password: hashedPassword });
     const result = await user.save();
 
+    // create the token
+    const token = jwt.sign(
+      {
+        email: result.email,
+        userId: result._id,
+      },
+      "Dragan Milovanovic",
+      { expiresIn: "14d" }
+    );
+
     // success response
     res.status(201).json({
       status: 201,
       message: "Korisnik je uspešno kreiran.",
+      token,
+      expiresIn: 14 * 24 * 60 * 60, // token expiration
       user: {
         userId: result._id,
         email: result.email,
