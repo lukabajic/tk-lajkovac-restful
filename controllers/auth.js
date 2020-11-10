@@ -79,3 +79,58 @@ exports.register = async (req, res, next) => {
     });
   }
 };
+
+exports.login = async (req, res, next) => {
+  // extract email and password from request
+  const { email, password } = req.body;
+
+  try {
+    // look for a user with the entered email
+    const user = await User.findOne({ email });
+    if (!user) {
+      const error = new Error("Email ne postoji u našoj bazi.");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    // check if the passwords match
+    const passwordsMatch = await bcrypt.compare(password, user.password);
+    if (!passwordsMatch) {
+      const error = new Error("Uneli ste pogrešnu šifru.");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    // create the token
+    const token = jwt.sign(
+      {
+        email: user.email,
+        userId: user._id,
+      },
+      "Dragan Milovanovic",
+      { expiresIn: "14d" }
+    );
+
+    // success response
+    res.status(200).json({
+      status: 200,
+      message: "Uspešno ste se ulogovali.",
+      token,
+      expiresIn: 14 * 24 * 60 * 60, // token expiration
+      user: {
+        userId: user._id,
+        email: user.email,
+        emailVerified: user.emailVerified,
+        isAdmin: user.isAdmin,
+        displayName: user.displayName,
+        avatarUrl: user.avatarUrl,
+        phone: user.phone,
+      },
+    });
+  } catch (err) {
+    res.json({
+      error: err.message || err.toString(),
+      status: err.statusCode || 500,
+    });
+  }
+};
