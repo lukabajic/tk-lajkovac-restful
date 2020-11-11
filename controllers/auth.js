@@ -5,7 +5,7 @@ const User = require("../models/user");
 
 const generateToken = require("./utility/jwt");
 const message = require("./utility/verify");
-const userData = require("./utility/userData");
+const { userData } = require("./utility/user");
 const { catchError, throwError } = require("./utility/errors");
 
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY);

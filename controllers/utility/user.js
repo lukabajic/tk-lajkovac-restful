@@ -1,4 +1,4 @@
-const userData = (user) => ({
+exports.userData = (user) => ({
   userId: user._id,
   email: user.email,
   emailVerified: user.emailVerified,
@@ -7,5 +7,3 @@ const userData = (user) => ({
   avatarUrl: user.avatarUrl,
   phone: user.phone,
 });
-
-module.exports = userData;
