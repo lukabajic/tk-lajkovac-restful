@@ -1,7 +1,7 @@
 exports.catchError = (res, err) => {
-  res.json({
+  res.status(err.statusCode || 500).json({
     error: err.message || err.toString(),
-    status: err.statusCode || 500,
+    statusCode: err.statusCode || 500,
   });
 };
 
