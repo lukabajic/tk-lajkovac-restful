@@ -93,4 +93,11 @@ const html = (userId) => `
 </html>
 `;
 
-module.exports = html;
+const message = (userId, email) => ({
+  to: email,
+  from: "me@lukabajic.dev",
+  subject: "Potvrda email adrese",
+  html: html(userId),
+});
+
+module.exports = message;
