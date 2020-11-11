@@ -38,7 +38,7 @@ exports.register = async (req, res, next) => {
           statusCode: 201,
           message: "Korisnik je uspešno kreiran.",
           token,
-          expiresIn: 14 * 24 * 60 * 60, // token expiration
+          expiresIn: 14 * 24 * 60 * 60 * 1000, // token expiration
           user: userData(result),
         });
       })
@@ -70,7 +70,7 @@ exports.login = async (req, res, next) => {
       statusCode: 200,
       message: "Uspešno ste se ulogovali.",
       token,
-      expiresIn: 14 * 24 * 60 * 60, // token expiration
+      expiresIn: 14 * 24 * 60 * 60 * 1000, // token expiration
       user: userData(user),
     });
   } catch (err) {
