@@ -35,6 +35,7 @@ React logic and server-side logic are separated into different directories/repos
 - [Redux](https://redux.js.org/) - state management.
 - [React Redux](https://react-redux.js.org/) - react bindings for redux.
 - [Redux Thunk](https://github.com/reduxjs/redux-thunk) - middleware for async logic.
+- [React Router](https://reactrouter.com/web) - makes it a SPA.
 
 - [mongoose](https://mongoosejs.com/) - makes communicating with MongoDB easier.
 - [dotenv](https://github.com/motdotla/dotenv) - loads local variables.
