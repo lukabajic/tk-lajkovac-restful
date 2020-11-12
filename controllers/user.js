@@ -55,3 +55,24 @@ exports.resendVerificationEmail = async (req, res, next) => {
     catchError(res, err);
   }
 };
+
+exports.updateUserData = async (req, res, next) => {
+  const { displayName, phone } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    !user && throwError("Korisnink ne postoji u našoj bazi.", 404);
+
+    user.displayName = displayName;
+    user.phone = phone;
+    const result = await user.save();
+
+    res.status(200).json({
+      statusCode: 200,
+      message: "Podaci su sačuvani.",
+      user: userData(result),
+    });
+  } catch (err) {
+    catchError(res, err);
+  }
+};

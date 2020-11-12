@@ -12,4 +12,6 @@ router.post("/verify", isAuth, userController.verifyUser);
 
 router.post("/resend", isAuth, userController.resendVerificationEmail);
 
+router.post("/update", isAuth, userController.updateUserData);
+
 module.exports = router;
