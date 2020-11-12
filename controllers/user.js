@@ -58,6 +58,7 @@ exports.resendVerificationEmail = async (req, res, next) => {
 
 exports.updateUserData = async (req, res, next) => {
   const { displayName, phone } = req.body;
+  const { userId } = req;
 
   try {
     const user = await User.findById(userId);
