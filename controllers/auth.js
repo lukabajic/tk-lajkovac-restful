@@ -25,7 +25,7 @@ exports.register = async (req, res, next) => {
     const token = generateToken(result._id, result.email);
 
     sendgrid
-      .send(message(result._id, email))
+      .send(message(token, email))
       .then(() => {
         res.status(201).json({
           statusCode: 201,

@@ -1,4 +1,4 @@
-const html = (userId) => `
+const html = (token) => `
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -85,7 +85,7 @@ const html = (userId) => `
       <p class="paragraph">
         Molimo vas da potvrdite vašu email adresu klikom na link ispod.
       </p>
-      <a class="link" href="${process.env.WEBSITE_URI}/auth/verify-email?userId=${userId}"
+      <a class="link" href="${process.env.WEBSITE_URI}/user/verification/${token}"
         >Potvrdite email</a
       >
     </main>
@@ -93,11 +93,11 @@ const html = (userId) => `
 </html>
 `;
 
-const message = (userId, email) => ({
+const message = (token, email) => ({
   to: email,
   from: "me@lukabajic.dev",
   subject: "Potvrda email adrese",
-  html: html(userId),
+  html: html(token),
 });
 
 module.exports = message;

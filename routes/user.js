@@ -8,4 +8,6 @@ const router = express.Router();
 
 router.get("/get", isAuth, userController.getUser);
 
+router.post("/verify", isAuth, userController.verifyUser);
+
 module.exports = router;
