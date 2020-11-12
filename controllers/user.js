@@ -27,12 +27,14 @@ exports.verifyUser = async (req, res, next) => {
     const user = await User.findById(userId);
     !user && throwError("Email ne postoji u našoj bazi.", 404);
 
+    user.emailVerified && throwError("Nalog je već potvrđen.", 400);
+
     user.emailVerified = true;
     const result = await user.save();
 
     res.status(200).json({
       statusCode: 200,
-      message: "Nalog je uspešno potvrdjen.",
+      message: "Nalog je uspešno potvrđen.",
       user: userData(result),
     });
   } catch (err) {
