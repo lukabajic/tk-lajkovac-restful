@@ -2,13 +2,14 @@ const User = require("../models/user");
 
 const { throwError, catchError } = require("./utility/errors");
 const { userData } = require("./utility/user");
+const sendMail = require("./utility/verify");
 
 exports.getUser = async (req, res, next) => {
   const { userId } = req;
 
   try {
     const user = await User.findById(userId);
-    !user && throwError("Email ne postoji u našoj bazi.", 404);
+    !user && throwError("Korisnik ne postoji u našoj bazi.", 404);
 
     res.status(201).json({
       statusCode: 201,
@@ -25,7 +26,7 @@ exports.verifyUser = async (req, res, next) => {
 
   try {
     const user = await User.findById(userId);
-    !user && throwError("Email ne postoji u našoj bazi.", 404);
+    !user && throwError("Korisnink ne postoji u našoj bazi.", 404);
 
     user.emailVerified && throwError("Nalog je već potvrđen.", 400);
 
@@ -36,6 +37,19 @@ exports.verifyUser = async (req, res, next) => {
       statusCode: 200,
       message: "Nalog je uspešno potvrđen.",
       user: userData(result),
+    });
+  } catch (err) {
+    catchError(res, err);
+  }
+};
+
+exports.resendVerificationEmail = async (req, res, next) => {
+  const { token, email } = req;
+  try {
+    await sendMail(token, email);
+    res.status(200).json({
+      statusCode: 200,
+      message: "Email je uspešno poslat.",
     });
   } catch (err) {
     catchError(res, err);

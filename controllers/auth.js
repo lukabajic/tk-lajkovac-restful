@@ -1,14 +1,11 @@
 const bcrypt = require("bcryptjs");
-const sendgrid = require("@sendgrid/mail");
 
 const User = require("../models/user");
 
 const generateToken = require("./utility/jwt");
-const message = require("./utility/verify");
+const sendMail = require("./utility/verify");
 const { userData } = require("./utility/user");
 const { catchError, throwError } = require("./utility/errors");
-
-sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
 exports.register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -24,18 +21,15 @@ exports.register = async (req, res, next) => {
 
     const token = generateToken(result._id, result.email);
 
-    sendgrid
-      .send(message(token, email))
-      .then(() => {
-        res.status(201).json({
-          statusCode: 201,
-          message: "Korisnik je uspešno kreiran.",
-          token,
-          expiresIn: 14 * 24 * 60 * 60 * 1000,
-          user: userData(result),
-        });
-      })
-      .catch(() => throwError("Greška pri slanju verifikacionog koda.", 502));
+    await sendMail(token, email);
+
+    res.status(201).json({
+      statusCode: 201,
+      message: "Korisnik je uspešno kreiran.",
+      token,
+      expiresIn: 14 * 24 * 60 * 60 * 1000,
+      user: userData(result),
+    });
   } catch (err) {
     catchError(res, err);
   }
