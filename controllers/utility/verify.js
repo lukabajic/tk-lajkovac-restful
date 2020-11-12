@@ -85,7 +85,7 @@ const html = (token) => `
       <p class="paragraph">
         Molimo vas da potvrdite vašu email adresu klikom na link ispod.
       </p>
-      <a class="link" href="${process.env.WEBSITE_URI}/user/verification/${token}"
+      <a class="link" href="${process.env.WEBSITE_URI}/verification/${token}"
         >Potvrdite email</a
       >
     </main>
