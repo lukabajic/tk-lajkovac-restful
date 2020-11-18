@@ -42,3 +42,4 @@ React logic and server-side logic are separated into different directories/repos
 - [jsonwebtoken](https://jwt.io/) - for authethication.
 - [bcryptjs](https://www.npmjs.com/package/bcryptjs) - password encryption.
 - [@sendgrid/mail](https://sendgrid.com/) - for verifaction and reset password emails.
+- [node-cron](https://www.npmjs.com/package/cron) - to schedule database updates every day.

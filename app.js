@@ -1,11 +1,16 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cron = require("node-cron");
 
 require("dotenv").config();
 
 // routes
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
+const scheduleRoutes = require("./routes/schedule");
+
+// util
+const { midnightUpdate } = require("./controllers/schedule");
 
 // where to run server
 const port = process.env.PORT || 8000;
@@ -38,9 +43,15 @@ app.use((req, res, next) => {
   next();
 });
 
+// DB daily updates
+cron.schedule("0 0 * * *", () => {
+  midnightUpdate();
+});
+
 // use routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/schedule", scheduleRoutes);
 
 mongoose
   .connect(MONGO_URL, options)
