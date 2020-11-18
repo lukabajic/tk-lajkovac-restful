@@ -1,5 +1,5 @@
 const Schedule = require("../models/schedule");
-const { court1, court2, court3 } = require("../models/test");
+const Court = require("../models/court");
 
 const getDates = require("./utility/getDates");
 
@@ -8,9 +8,13 @@ exports.midnightUpdate = async () => {
 
   await Schedule.deleteOne({ date: yesterday });
 
+  const court1 = await Court.findOne({ number: 1 });
+  const court2 = await Court.findOne({ number: 2 });
+  const court3 = await Court.findOne({ number: 3 });
+
   const dayAfterSchedule = new Schedule({
     date: dayAfter,
-    courts: { 1: court1, 2: court2, 3: court3 },
+    courts: { 1: court1.times, 2: court2.times, 3: court3.times },
   });
   await dayAfterSchedule.save();
 };
