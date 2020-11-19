@@ -1,12 +1,14 @@
 const Schedule = require("../models/schedule");
+const User = require("../models/user");
 const Court = require("../models/court");
 
 const getDates = require("./utility/getDates");
 const scheduleData = require("./utility/scheduleData");
+const { userData } = require("./utility/user");
 
 const { throwError, catchError } = require("./utility/errors");
 
-exports.midnightUpdate = async () => {
+exports.midnightUpdateSchedule = async () => {
   const { yesterday, dayAfter } = getDates();
 
   await Schedule.deleteOne({ date: yesterday });
@@ -47,6 +49,9 @@ exports.scheduleTime = async (req, res, next) => {
     const schedule = await Schedule.findOne({ date: date.toDateString() });
     !schedule && throwError("Raspored nije pronađen.", 404);
 
+    const user = await User.findById(userId);
+    !user && throwError("Korisnik ne postoji u našoj bazi.", 404);
+
     const timeToSchedule = schedule.courts[+court].find(
       (el) => el.start === time
     );
@@ -57,21 +62,25 @@ exports.scheduleTime = async (req, res, next) => {
 
       timeToSchedule.taken = false;
       timeToSchedule.userId = null;
+      user.scheduled[day] = false;
     } else {
       timeToSchedule.taken && throwError("Termin je već zauzet.", 404);
 
       timeToSchedule.taken = true;
       timeToSchedule.userId = userId;
+      user.scheduled[day] = { court, time };
     }
 
     await schedule.save();
+    const result = await Schedule.find();
+
+    const resultUser = await user.save();
 
     res.status(200).json({
       statusCode: 200,
       message: `Termin je uspšno ${action === "cancel" ? "ot" : ""}zakazan.`,
-      date: date.toDateString(),
-      court,
-      time: timeToSchedule,
+      schedule: scheduleData(result),
+      user: userData(resultUser),
     });
   } catch (err) {
     catchError(res, err);

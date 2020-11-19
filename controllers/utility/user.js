@@ -6,4 +6,5 @@ exports.userData = (user) => ({
   displayName: user.displayName,
   avatarUrl: user.avatarUrl,
   phone: user.phone,
+  scheduled: user.scheduled,
 });
