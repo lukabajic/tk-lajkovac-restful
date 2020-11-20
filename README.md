@@ -36,6 +36,7 @@ React logic and server-side logic are separated into different directories/repos
 - [React Redux](https://react-redux.js.org/) - react bindings for redux.
 - [Redux Thunk](https://github.com/reduxjs/redux-thunk) - middleware for async logic.
 - [React Router](https://reactrouter.com/web) - makes it a SPA.
+- [socket.io-client](https://socket.io/docs/v3/client-api/index.html) - regoister changes.
 
 - [mongoose](https://mongoosejs.com/) - makes communicating with MongoDB easier.
 - [dotenv](https://github.com/motdotla/dotenv) - loads local variables.
@@ -43,3 +44,4 @@ React logic and server-side logic are separated into different directories/repos
 - [bcryptjs](https://www.npmjs.com/package/bcryptjs) - password encryption.
 - [@sendgrid/mail](https://sendgrid.com/) - for verifaction and reset password emails.
 - [node-cron](https://www.npmjs.com/package/cron) - to schedule database updates every day.
+- [socket.io](https://socket.io/) - web sockets to emit changes.
