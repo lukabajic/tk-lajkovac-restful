@@ -58,11 +58,15 @@ app.use("/api/v1/schedule", scheduleRoutes);
 mongoose
   .connect(MONGO_URL, options)
   .then(() => {
-    app.listen(port, (err) => {
+    const server = app.listen(port, (err) => {
       if (err) {
         throw err;
       }
       console.log(`> Ready on ${ROOT_URL}`);
+    });
+    const io = require("./socket").init(server);
+    io.on("connection", (socket) => {
+      console.log("Client connected.");
     });
   })
   .catch((err) => console.log(err));

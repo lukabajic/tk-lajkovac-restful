@@ -1,3 +1,5 @@
+const io = require("../socket");
+
 const Schedule = require("../models/schedule");
 const User = require("../models/user");
 const Court = require("../models/court");
@@ -75,6 +77,11 @@ exports.scheduleTime = async (req, res, next) => {
     const result = await Schedule.find();
 
     const resultUser = await user.save();
+
+    io.get().emit("schedule", {
+      action: "time",
+      schedule: scheduleData(result),
+    });
 
     res.status(200).json({
       statusCode: 200,
