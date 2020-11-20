@@ -3,6 +3,7 @@ const User = require("../models/user");
 const { throwError, catchError } = require("./utility/errors");
 const { userData } = require("./utility/user");
 const sendMail = require("./utility/verify");
+const getDates = require("./utility/getDates");
 
 exports.getUser = async (req, res, next) => {
   const { userId } = req;
@@ -76,4 +77,18 @@ exports.updateUserData = async (req, res, next) => {
   } catch (err) {
     catchError(res, err);
   }
+};
+
+exports.midnightUpdateUser = async () => {
+  const users = await User.find();
+  !users && throwError("Nismo pronašli korisnike u našoj bazi.", 404);
+
+  users.forEach(async (user) => {
+    user.scheduled = {
+      0: user.scheduled[1],
+      1: user.scheduled[2],
+      2: null,
+    };
+    await user.save();
+  });
 };

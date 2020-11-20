@@ -11,6 +11,7 @@ const scheduleRoutes = require("./routes/schedule");
 
 // util
 const { midnightUpdateSchedule } = require("./controllers/schedule");
+const { midnightUpdateUser } = require("./controllers/user");
 
 // where to run server
 const port = process.env.PORT || 8000;
@@ -46,6 +47,7 @@ app.use((req, res, next) => {
 // DB daily updates
 cron.schedule("0 0 * * *", () => {
   midnightUpdateSchedule();
+  midnightUpdateUser();
 });
 
 // use routes
