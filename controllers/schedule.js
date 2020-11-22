@@ -80,6 +80,7 @@ exports.scheduleTime = async (req, res, next) => {
 
     io.get().emit("schedule", {
       action: "time",
+      user: userData(resultUser),
       schedule: scheduleData(result),
     });
 

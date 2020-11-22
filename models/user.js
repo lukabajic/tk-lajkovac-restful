@@ -16,6 +16,10 @@ const mongoSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  isPremium: {
+    type: Boolean,
+    default: false,
+  },
   emailVerified: {
     type: Boolean,
     default: false,
@@ -36,6 +40,10 @@ const mongoSchema = new Schema({
     0: { type: Object, default: null },
     1: { type: Object, default: null },
     2: { type: Object, default: null },
+  },
+  category: {
+    type: String,
+    default: "-",
   },
 });
 

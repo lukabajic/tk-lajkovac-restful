@@ -3,7 +3,6 @@ const User = require("../models/user");
 const { throwError, catchError } = require("./utility/errors");
 const { userData } = require("./utility/user");
 const sendMail = require("./utility/verify");
-const getDates = require("./utility/getDates");
 
 exports.getUser = async (req, res, next) => {
   const { userId } = req;
@@ -16,6 +15,24 @@ exports.getUser = async (req, res, next) => {
       statusCode: 201,
       message: "Korisnik je uspešno pronadjen.",
       user: userData(user),
+    });
+  } catch (err) {
+    catchError(res, err);
+  }
+};
+
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find().select(
+      "-password -emailVerified -isAdmin -email -__v -avatarUrl"
+    );
+    !users &&
+      throwError("Došlo je do greške prilikom pretrage korisnika.", 404);
+
+    res.status(201).json({
+      statusCode: 201,
+      message: "List svih korisnika je pronađena.",
+      users: users.map((user) => userData(user)),
     });
   } catch (err) {
     catchError(res, err);
