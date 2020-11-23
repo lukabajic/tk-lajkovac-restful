@@ -20,15 +20,11 @@ exports.createScheduleDay = async (req, res, next) => {
     const courts = await courtSchedule.find().select("-_id -times._id -__v");
     !courts && throwError("Nije pronađen nijedan teren.", 400);
 
-    const scheduleDay = await new ScheduleDay({
+    const scheduleDay = new ScheduleDay({
       date: dates[day],
       courts: courts,
-    }).save();
-    !scheduleDay &&
-      throwError(
-        "Greška pri pokušaju da se sačuva dnevni raspored u bazi.",
-        500
-      );
+    });
+    await scheduleDay.save();
 
     io.get().emit("schedule", {
       action: "create",

@@ -3,8 +3,8 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 
 const generateToken = require("./utility/jwt");
-const sendMail = require("./utility/verify");
-const { userData } = require("./utility/user");
+const { sendVerificationMail } = require("./utility/sendgrid");
+const { userData } = require("./utility/userData");
 const { catchError, throwError } = require("./utility/errors");
 
 exports.register = async (req, res, next) => {
@@ -21,14 +21,14 @@ exports.register = async (req, res, next) => {
 
     const token = generateToken(result._id, result.email);
 
-    await sendMail(token, email);
+    await sendVerificationMail(token, email);
 
     res.status(201).json({
       statusCode: 201,
       message: "Korisnik je uspešno kreiran.",
       token,
       expiresIn: 14 * 24 * 60 * 60 * 1000,
-      user: userData(result),
+      user: userData(user),
     });
   } catch (err) {
     catchError(res, err);

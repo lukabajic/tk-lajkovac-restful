@@ -9,15 +9,11 @@ exports.createCourtSchedule = async (req, res, next) => {
     const check = await CourtSchedule.findOne({ number: courtScheduleNumber });
     check && throwError("Teren već ima raspored termina.", 400);
 
-    const courtSchedule = await new CourtSchedule({
+    const courtSchedule = new CourtSchedule({
       number: courtScheduleNumber,
       times: courtScheduleTimes,
-    }).save();
-    !courtSchedule &&
-      throwError(
-        "Greška pri pokušaju da se sačuva raspored termina za teren u bazi.",
-        400
-      );
+    });
+    await courtSchedule.save();
 
     res.status(200).json({
       statusCode: 200,
@@ -58,12 +54,8 @@ exports.editCourtSchedule = async (req, res, next) => {
       throwError(`Teren broj ${courtScheduleNumber} ne postoji.`, 400);
 
     courtSchedule.times = courtScheduleTimes;
-    const updatedCourtSchedule = await courtSchedule.save();
-    !updatedCourtSchedule &&
-      throwError(
-        "Greška pri pokušaju da se sačuva raspored za teren u bazi.",
-        400
-      );
+
+    await courtSchedule.save();
 
     res.status(200).json({
       statusCode: 200,

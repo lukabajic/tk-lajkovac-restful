@@ -5,15 +5,15 @@ const { Schema } = mongoose;
 const scheduleSubSchema = new Schema({
   date: {
     type: String,
-    default: "",
+    required: true,
   },
   time: {
     type: String,
-    default: "",
+    required: true,
   },
   scheduleId: {
     type: Schema.Types.ObjectId,
-    default: null,
+    required: true,
   },
 });
 
@@ -27,6 +27,10 @@ const userSchema = new Schema({
     required: true,
   },
   emailVerified: {
+    type: Boolean,
+    default: false,
+  },
+  isAdmin: {
     type: Boolean,
     default: false,
   },

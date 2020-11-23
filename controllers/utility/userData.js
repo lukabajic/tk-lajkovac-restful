@@ -3,9 +3,7 @@ exports.userData = (user) => ({
   email: user.email,
   emailVerified: user.emailVerified,
   isAdmin: user.isAdmin,
-  displayName: user.displayName,
-  avatarUrl: user.avatarUrl,
-  phone: user.phone,
-  scheduled: user.scheduled,
-  category: user.category,
+  data: user.data,
+  schedule: user.schedule,
+  league: user.league,
 });
