@@ -6,10 +6,10 @@ module.exports = (req, res, next) => {
   try {
     const authHeader = req.get("Authorization");
     !authHeader &&
-      throwError("Niste ulogovani ili nemate pravo pristupa.", 401);
+      throwError("Niste ulogovani ili nemate pravo pristupa.", 400);
 
     const token = authHeader.split(" ")[1];
-    !token && throwError("Niste ulogovani ili nemate pravo pristupa.", 401);
+    !token && throwError("Niste ulogovani ili nemate pravo pristupa.", 400);
 
     const decodedToken = jwt.verify(token, "Dragan Milovanovic");
 

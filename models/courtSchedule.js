@@ -5,6 +5,7 @@ const { Schema } = mongoose;
 const mongoSchema = new Schema({
   number: {
     type: Number,
+    required: true,
   },
   times: [
     {
@@ -14,6 +15,6 @@ const mongoSchema = new Schema({
   ],
 });
 
-const Court = mongoose.model("Court", mongoSchema);
+const CourtSchedule = mongoose.model("CourtSchedule", mongoSchema);
 
-module.exports = Court;
+module.exports = CourtSchedule;

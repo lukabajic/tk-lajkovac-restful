@@ -2,51 +2,55 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
-const mongoSchema = new Schema({
+const scheduleSubSchema = new Schema({
+  date: {
+    type: String,
+    default: "",
+  },
+  time: {
+    type: String,
+    default: "",
+  },
+  scheduleId: {
+    type: Schema.Types.ObjectId,
+    default: null,
+  },
+});
+
+const userSchema = new Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
   },
   password: {
     type: String,
     required: true,
   },
-  isAdmin: {
-    type: Boolean,
-    default: false,
-  },
-  isPremium: {
-    type: Boolean,
-    default: false,
-  },
   emailVerified: {
     type: Boolean,
     default: false,
   },
-  displayName: {
-    type: String,
-    default: "",
+  data: {
+    displayName: {
+      type: String,
+      default: "",
+    },
+    phone: {
+      type: String,
+      default: "",
+    },
+    isPremium: {
+      type: Boolean,
+      default: false,
+    },
   },
-  avatarUrl: {
-    type: String,
-    default: "",
-  },
-  phone: {
-    type: String,
-    default: "",
-  },
-  scheduled: {
-    0: { type: Object, default: null },
-    1: { type: Object, default: null },
-    2: { type: Object, default: null },
-  },
-  category: {
-    type: String,
-    default: "-",
+  schedule: [scheduleSubSchema],
+  league: {
+    leagueId: Schema.Types.ObjectId,
+    groupId: Schema.Types.ObjectId,
   },
 });
 
-const User = mongoose.model("User", mongoSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

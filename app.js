@@ -7,10 +7,11 @@ require("dotenv").config();
 // routes
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
-const scheduleRoutes = require("./routes/schedule");
+const scheduleDayRoutes = require("./routes/scheduleDay");
+const courtScheduleRoutes = require("./routes/courtSchedule");
 
 // util
-const { midnightUpdateSchedule } = require("./controllers/schedule");
+const { midnightUpdateSchedule } = require("./controllers/scheduleDay");
 const { midnightUpdateUser } = require("./controllers/user");
 
 // where to run server
@@ -53,7 +54,8 @@ cron.schedule("0 0 * * *", () => {
 // use routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
-app.use("/api/v1/schedule", scheduleRoutes);
+app.use("/api/v1/schedule-day", scheduleDayRoutes);
+app.use("/api/v1/court-schedule", courtScheduleRoutes);
 
 mongoose
   .connect(MONGO_URL, options)
