@@ -7,6 +7,10 @@ const scheduleSubSchema = new Schema({
     type: String,
     required: true,
   },
+  court: {
+    type: Number,
+    required: true,
+  },
   time: {
     type: String,
     required: true,

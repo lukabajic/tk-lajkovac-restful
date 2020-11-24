@@ -2,7 +2,7 @@ const io = require("../socket");
 
 const ScheduleDay = require("../models/scheduleDay");
 const courtSchedule = require("../models/courtSchedule");
-// const User = require("../models/user");
+const User = require("../models/user");
 
 const getDates = require("./utility/getDates");
 
@@ -83,6 +83,9 @@ exports.editDaySchedule = async (req, res, next) => {
   const dates = getDates();
 
   try {
+    const user = await User.findById(userId);
+    !user && throwError("Korisnink ne postoji u našoj bazi.", 404);
+
     const scheduleDay = await ScheduleDay.findOne({ date: dates[day] });
     !scheduleDay && throwError(`Raspored za ${dates[day]} ne postoji.`, 400);
 
@@ -97,18 +100,36 @@ exports.editDaySchedule = async (req, res, next) => {
       );
 
     if (action === "cancel") {
+      !timeToUpdate.taken &&
+        throwError(
+          `Termin  ${time.slice(0, 2)}.${time.slice(2, 4)} nije zakazan.`,
+          400
+        );
+
       timeToUpdate.taken = false;
       timeToUpdate.userId = null;
+
+      user.schedule = user.schedule.filter(
+        (time) => time.scheduleId === timeToUpdate._id
+      );
     } else {
       timeToUpdate.taken = true;
       timeToUpdate.userId = userId;
+      user.schedule.push({
+        date: dates[day],
+        court,
+        time,
+        scheduleId: timeToUpdate._id,
+      });
     }
 
     const editedScheduleDay = await scheduleDay.save();
+    const editedUser = await user.save();
 
     io.get().emit("schedule", {
       action: "edit",
       editedScheduleDay,
+      editedUser,
     });
 
     res.status(200).json({

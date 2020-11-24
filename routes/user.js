@@ -16,4 +16,6 @@ router.post("/resend", isAuth, userController.resendVerificationEmail);
 
 router.post("/edit", isAuth, userController.updateUserData);
 
+router.delete("/delete", isAuth, userController.deleteUser);
+
 module.exports = router;
