@@ -1,20 +1,18 @@
 const bcrypt = require("bcryptjs");
 
-const User = require("../models/user");
-
 const { throwError, catchError } = require("./utility/errors");
 const { userData } = require("./utility/userData");
+const db = require("./utility/db");
 const { sendVerificationMail } = require("./utility/sendgrid");
 
 exports.getUser = async (req, res, next) => {
-  const userId = req.body.userId || req.userId;
+  const userId = req.query.userId || req.userId;
 
   try {
-    const user = await User.findById(userId);
-    !user && throwError("Korisnik ne postoji u našoj bazi.", 404);
+    const user = await db.getUser(userId);
 
-    res.status(201).json({
-      statusCode: 201,
+    res.status(200).json({
+      statusCode: 200,
       message: "Korisnik je uspešno pronadjen.",
       user: userData(user),
     });
@@ -25,11 +23,7 @@ exports.getUser = async (req, res, next) => {
 
 exports.getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find().select(
-      "-password -emailVerified -isAdmin -__v -avatarUrl -data.isPremium"
-    );
-    !users &&
-      throwError("Došlo je do greške prilikom pretrage korisnika.", 404);
+    const users = await db.getUsers();
 
     res.status(201).json({
       statusCode: 201,
@@ -45,10 +39,9 @@ exports.verifyUserEmail = async (req, res, next) => {
   const { userId } = req;
 
   try {
-    const user = await User.findById(userId);
-    !user && throwError("Korisnink ne postoji u našoj bazi.", 404);
+    const user = await db.getUser(userId);
 
-    user.emailVerified && throwError("Nalog je već potvrđen.", 400);
+    user.emailVerified && throwError("Nalog je već potvrđen.", 409);
 
     user.emailVerified = true;
 
@@ -82,8 +75,7 @@ exports.updateUserData = async (req, res, next) => {
   const { userId, token } = req;
 
   try {
-    const user = await User.findById(userId);
-    !user && throwError("Korisnink ne postoji u našoj bazi.", 404);
+    const user = await db.getUser(userId);
 
     switch (action) {
       case "SET_INITIAL_DATA":
@@ -96,6 +88,7 @@ exports.updateUserData = async (req, res, next) => {
         await sendVerificationMail(token, payload.email);
         break;
       case "UPDATE_PASSWORD":
+        await db.passwordMatches(payload.password, payload.oldPassword);
         const hashedPassword = await bcrypt.hash(payload.password, 12);
         user.password = hashedPassword;
         break;
@@ -121,14 +114,13 @@ exports.updateUserData = async (req, res, next) => {
 };
 
 exports.deleteUser = async (req, res, next) => {
-  const { userId, password } = req.body;
+  const { password } = req.body;
+  const { userId } = req;
 
   try {
-    const user = await User.findById(userId);
-    !user && throwError("Korisnink ne postoji u našoj bazi.", 404);
+    const user = await db.getUser(userId);
 
-    const passwordsMatch = await bcrypt.compare(password, user.password);
-    !passwordsMatch && throwError("Uneli ste pogrešnu lozinku.", 401);
+    await db.passwordMatches(password, user.password);
 
     await user.remove();
 
@@ -145,8 +137,7 @@ exports.giveUserPremiumPermissions = async (req, res, next) => {
   const { userId } = req.body;
 
   try {
-    const user = await User.findById(userId);
-    !user && throwError("Korisnink ne postoji u našoj bazi.", 404);
+    const user = await db.getUser(userId);
 
     user.data.isPremium = true;
 

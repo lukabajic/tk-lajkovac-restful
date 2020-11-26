@@ -1,23 +1,20 @@
 const CourtSchedule = require("../models/courtSchedule");
 
-const { throwError, catchError } = require("./utility/errors");
+const db = require("./utility/db");
+const { catchError } = require("./utility/errors");
 
 exports.createCourtSchedule = async (req, res, next) => {
-  const { courtScheduleTimes, courtScheduleNumber } = req.body;
+  const { times, number } = req.body;
 
   try {
-    const check = await CourtSchedule.findOne({ number: courtScheduleNumber });
-    check && throwError("Teren već ima raspored termina.", 400);
+    await db.courtScheduleExists(number);
 
-    const courtSchedule = new CourtSchedule({
-      number: courtScheduleNumber,
-      times: courtScheduleTimes,
-    });
+    const courtSchedule = new CourtSchedule({ number, times });
     await courtSchedule.save();
 
     res.status(200).json({
       statusCode: 200,
-      message: `Novi raspored za teren ${courtScheduleNumber} je uspešno napravljen.`,
+      message: `Novi raspored za teren ${number} je uspešno napravljen.`,
     });
   } catch (err) {
     catchError(res, err);
@@ -25,18 +22,27 @@ exports.createCourtSchedule = async (req, res, next) => {
 };
 
 exports.getCourtSchedule = async (req, res, next) => {
-  const { courtScheduleNumber } = req.body;
+  const { number } = req.query;
 
   try {
-    const courtSchedule = await CourtSchedule.findOne({
-      number: courtScheduleNumber,
-    });
-    !courtSchedule &&
-      throwError(`Teren broj ${courtScheduleNumber} ne postoji.`, 400);
+    const courtSchedule = await db.getCourt(number);
 
     res.status(200).json({
       statusCode: 200,
-      courtSchedule: courtSchedule,
+      courtSchedule,
+    });
+  } catch (err) {
+    catchError(res, err);
+  }
+};
+
+exports.getAllCourtSchedule = async (req, res, next) => {
+  try {
+    const courtSchedules = await db.getAllCourts();
+
+    res.status(200).json({
+      statusCode: 200,
+      courtSchedules,
     });
   } catch (err) {
     catchError(res, err);
@@ -44,22 +50,18 @@ exports.getCourtSchedule = async (req, res, next) => {
 };
 
 exports.editCourtSchedule = async (req, res, next) => {
-  const { courtScheduleTimes, courtScheduleNumber } = req.body;
+  const { times, number } = req.body;
 
   try {
-    const courtSchedule = await CourtSchedule.findOne({
-      number: courtScheduleNumber,
-    });
-    !courtSchedule &&
-      throwError(`Teren broj ${courtScheduleNumber} ne postoji.`, 400);
+    const courtSchedule = await db.getCourt(number);
 
-    courtSchedule.times = courtScheduleTimes;
+    courtSchedule.times = times;
 
     await courtSchedule.save();
 
     res.status(200).json({
       statusCode: 200,
-      message: `Raspored za teren ${courtScheduleNumber} je uspešno promenjen.`,
+      message: `Raspored za teren ${number} je uspešno promenjen.`,
     });
   } catch (err) {
     catchError(res, err);
@@ -67,18 +69,16 @@ exports.editCourtSchedule = async (req, res, next) => {
 };
 
 exports.deleteCourtSchedule = async (req, res, next) => {
-  const { courtScheduleNumber } = req.body;
+  const { number } = req.query;
 
   try {
-    const courtSchedule = await CourtSchedule.deleteOne({
-      number: courtScheduleNumber,
-    });
-    !courtSchedule &&
-      throwError(`Teren broj ${courtScheduleNumber} ne postoji.`, 400);
+    const courtSchedule = await db.getCourt(number);
+
+    courtSchedule.remove();
 
     res.status(200).json({
       statusCode: 200,
-      message: `Raspored za teren ${courtScheduleNumber} je uspešno obrisan.`,
+      message: `Raspored za teren ${number} je uspešno obrisan.`,
     });
   } catch (err) {
     catchError(res, err);

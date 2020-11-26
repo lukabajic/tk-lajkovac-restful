@@ -5,14 +5,14 @@ const User = require("../models/user");
 const generateToken = require("./utility/jwt");
 const { sendVerificationMail } = require("./utility/sendgrid");
 const { userData } = require("./utility/userData");
-const { catchError, throwError } = require("./utility/errors");
+const db = require("./utility/db");
+const { catchError } = require("./utility/errors");
 
 exports.register = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-    const check = await User.findOne({ email });
-    check && throwError("Email se je već u upotrebi.", 409);
+    await db.userExists(email);
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -25,7 +25,6 @@ exports.register = async (req, res, next) => {
 
     res.status(201).json({
       statusCode: 201,
-      message: "Korisnik je uspešno kreiran.",
       token,
       expiresIn: 14 * 24 * 60 * 60 * 1000,
       user: userData(user),
@@ -39,17 +38,14 @@ exports.login = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
-    !user && throwError("Email ne postoji u našoj bazi.", 404);
+    const user = await db.getUserByEmail(email);
 
-    const passwordsMatch = await bcrypt.compare(password, user.password);
-    !passwordsMatch && throwError("Uneli ste pogrešnu lozinku.", 401);
+    await db.passwordMatches(password, user.password);
 
     const token = generateToken(user._id, user.email);
 
     res.status(200).json({
       statusCode: 200,
-      message: "Uspešno ste se ulogovali.",
       token,
       expiresIn: 14 * 24 * 60 * 60 * 1000,
       user: userData(user),

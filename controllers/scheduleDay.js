@@ -1,12 +1,11 @@
 const io = require("../socket");
 
 const ScheduleDay = require("../models/scheduleDay");
-const courtSchedule = require("../models/courtSchedule");
-const User = require("../models/user");
 
 const getDates = require("./utility/getDates");
 
-const { throwError, catchError } = require("./utility/errors");
+const { catchError } = require("./utility/errors");
+const db = require("./utility/db");
 
 exports.createScheduleDay = async (req, res, next) => {
   const { day } = req.body;
@@ -14,11 +13,9 @@ exports.createScheduleDay = async (req, res, next) => {
   const dates = getDates();
 
   try {
-    const check = await ScheduleDay.findOne({ date: dates[day] });
-    check && throwError(`Raspored za ${dates[day]} već postoji.`, 400);
+    await db.scheduleExists(dates[day]);
 
-    const courts = await courtSchedule.find().select("-_id -times._id -__v");
-    !courts && throwError("Nije pronađen nijedan teren.", 400);
+    const courts = await db.getAllCourts();
 
     const scheduleDay = new ScheduleDay({
       date: dates[day],
@@ -31,8 +28,8 @@ exports.createScheduleDay = async (req, res, next) => {
       scheduleDay,
     });
 
-    res.status(200).json({
-      statusCode: 200,
+    res.status(201).json({
+      statusCode: 201,
       message: `Novi raspored za ${dates[day]} je uspešno napravljen.`,
     });
   } catch (err) {
@@ -41,15 +38,12 @@ exports.createScheduleDay = async (req, res, next) => {
 };
 
 exports.getScheduleDay = async (req, res, next) => {
-  const { day } = req.body;
+  const { day } = req.query;
 
   const dates = getDates();
 
   try {
-    const scheduleDay = await ScheduleDay.findOne({ date: dates[day] }).select(
-      "-_id -courts._id -courts.times._id -__v"
-    );
-    !scheduleDay && throwError(`Raspored za ${dates[day]} ne postoji.`, 400);
+    const scheduleDay = await db.getSchedule(dates[day]);
 
     res.status(200).json({
       statusCode: 200,
@@ -62,10 +56,7 @@ exports.getScheduleDay = async (req, res, next) => {
 
 exports.getAllScheduleDays = async (req, res, next) => {
   try {
-    const scheduleDays = await ScheduleDay.find().select(
-      "-_id -courts._id -courts.times._id -__v"
-    );
-    !scheduleDays && throwError(`Raspored ne postoji.`, 400);
+    const scheduleDays = await db.getAllSchedues();
 
     res.status(200).json({
       statusCode: 200,
@@ -83,28 +74,16 @@ exports.editDaySchedule = async (req, res, next) => {
   const dates = getDates();
 
   try {
-    const user = await User.findById(userId);
-    !user && throwError("Korisnink ne postoji u našoj bazi.", 404);
+    const user = await db.getUser(userId);
 
-    const scheduleDay = await ScheduleDay.findOne({ date: dates[day] });
-    !scheduleDay && throwError(`Raspored za ${dates[day]} ne postoji.`, 400);
+    const scheduleDay = await db.getSchedule(dates[day]);
 
-    const courtToUpdate = scheduleDay.courts.find((el) => el.number === court);
-    !courtToUpdate && throwError(`Teren broj ${court} ne postoji.`, 400);
+    const courtToUpdate = db.getScheduleDayCourt(scheduleDay, court);
 
-    const timeToUpdate = courtToUpdate.times.find((el) => el.start === time);
-    !courtToUpdate &&
-      throwError(
-        `Termin u ${time.slice(0, 2)}.${time.slice(2, 4)} ne postoji.`,
-        400
-      );
+    const timeToUpdate = db.getScheduleDayTime(courtToUpdate, time);
 
     if (action === "cancel") {
-      !timeToUpdate.taken &&
-        throwError(
-          `Termin  ${time.slice(0, 2)}.${time.slice(2, 4)} nije zakazan.`,
-          400
-        );
+      db.isTimeNotTaken(timeToUpdate);
 
       timeToUpdate.taken = false;
       timeToUpdate.userId = null;
@@ -113,8 +92,11 @@ exports.editDaySchedule = async (req, res, next) => {
         (time) => time.scheduleId === timeToUpdate._id
       );
     } else {
+      db.isTimeTaken(timeToUpdate);
+
       timeToUpdate.taken = true;
       timeToUpdate.userId = userId;
+
       user.schedule.push({
         date: dates[day],
         court,
@@ -142,13 +124,14 @@ exports.editDaySchedule = async (req, res, next) => {
 };
 
 exports.deleteScheduleDay = async (req, res, next) => {
-  const { day } = req.body;
+  const { day } = req.query;
 
   const dates = getDates();
 
   try {
-    const scheduleDay = await ScheduleDay.deleteOne({ date: dates[day] });
-    !scheduleDay && throwError(`Raspored za ${dates[day]} ne postoji.`, 400);
+    const scheduleDay = await db.getSchedule(dates[day]);
+
+    await scheduleDay.remove();
 
     io.get().emit("schedule", {
       action: "delete",

@@ -2,6 +2,29 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
+const fixturesSubSchema = new Schema({
+  opponent: {
+    name: {
+      type: String,
+      required: true,
+    },
+    userId: {
+      type: String,
+      required: true,
+    },
+  },
+  score: {
+    playerGames: {
+      type: Number,
+      default: 0,
+    },
+    opponentGames: {
+      type: Number,
+      default: 0,
+    },
+  },
+});
+
 const scheduleSubSchema = new Schema({
   date: {
     type: String,
@@ -54,8 +77,15 @@ const userSchema = new Schema({
   },
   schedule: [scheduleSubSchema],
   league: {
-    leagueId: Schema.Types.ObjectId,
-    groupId: Schema.Types.ObjectId,
+    category: {
+      type: String,
+      default: "",
+    },
+    group: {
+      type: String,
+      default: "",
+    },
+    fixtures: [fixturesSubSchema],
   },
 });
 
