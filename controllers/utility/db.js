@@ -28,14 +28,21 @@ exports.allGroupMatches = (participants) => {
 
 exports.leagueExists = async (name) => {
   const check = await League.findOne({ name });
-  check && throwError("Liga sa tim imenom već postoji.", 400);
+  check && throwError("Liga sa tim imenom već postoji.", 409);
 };
 
 exports.getLeague = async (name) => {
   const league = await League.findOne({ name });
-  !league && throwError("Liga sa tim imenom ne postoji.", 400);
+  !league && throwError("Liga sa tim imenom ne postoji.", 404);
 
   return league;
+};
+
+exports.getAllLeagues = async () => {
+  const leagues = await League.find();
+  !leagues && throwError("Nijedna liga ne postoji.", 404);
+
+  return leagues;
 };
 
 exports.groupExists = (league, groupName) => {
@@ -57,11 +64,18 @@ exports.getGroup = (league, groupName) => {
 
 exports.getParticipant = (group, participantId) => {
   const participant = group.participants.find(
-    (el) => el.userId === participantId
+    (el) => el.userId.toString() === participantId
   );
-  !participant && throwError("Učesnik ne postoji.", 400);
+  !participant && throwError("Učesnik ne postoji.", 404);
 
   return participant;
+};
+
+exports.participantExists = (group, participantId) => {
+  const participant = group.participants.find(
+    (el) => el.userId.toString() === participantId
+  );
+  participant && throwError("Učesnik već u grupi.", 409);
 };
 
 exports.getSchedule = async (date) => {

@@ -7,6 +7,9 @@ require("dotenv").config();
 // routes
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
+const leagueRoutes = require("./routes/league");
+const leagueGroupRoutes = require("./routes/leagueGroup");
+const leagueParticipantRoutes = require("./routes/leagueParticipant");
 const scheduleDayRoutes = require("./routes/scheduleDay");
 const courtScheduleRoutes = require("./routes/courtSchedule");
 
@@ -54,6 +57,9 @@ cron.schedule("0 0 * * *", () => {
 // use routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/league", leagueRoutes);
+app.use("/api/v1/league/group", leagueGroupRoutes);
+app.use("/api/v1/league/participant", leagueParticipantRoutes);
 app.use("/api/v1/schedule-day", scheduleDayRoutes);
 app.use("/api/v1/court-schedule", courtScheduleRoutes);
 

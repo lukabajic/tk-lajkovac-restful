@@ -2,16 +2,38 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
+const fixtureSubSchema = new Schema({
+  played: {
+    type: Boolean,
+    default: false,
+  },
+  participantOne: {
+    type: String,
+    required: true,
+  },
+  participantTwo: {
+    type: String,
+    required: true,
+  },
+  participantOneGames: {
+    type: Number,
+    default: 0,
+  },
+  participantTwoGames: {
+    type: Number,
+    default: 0,
+  },
+});
+
 const participantSubSchema = new Schema({
   name: {
     type: String,
     required: true,
   },
-  _id: {
+  userId: {
     type: Schema.Types.ObjectId,
-    required,
+    required: true,
   },
-  matches: [fixtureSubSchema],
   totals: {
     wins: {
       type: Number,
@@ -32,44 +54,41 @@ const participantSubSchema = new Schema({
   },
 });
 
-const fixtureSubSchema = new Schema({
-  played: {
-    type: Boolean,
-    default: false,
-  },
-  participantOne: participantSubSchema,
-  participantTwo: participantSubSchema,
-  participantOneGames: {
+const participantRankSubSchema = new Schema({
+  place: {
     type: Number,
-    default: 0,
+    required: true,
   },
-  participantTwoGames: {
-    type: Number,
-    default: 0,
+  participantId: {
+    type: Schema.Types.ObjectId,
+    required: true,
   },
 });
 
 const groupSubSchema = new Schema({
-  leagueId: {
-    type: Schema.Types.ObjectId,
-    required,
+  name: {
+    type: String,
+    required: true,
   },
   participants: [participantSubSchema],
   fixtures: [fixtureSubSchema],
+  scoreboard: [participantRankSubSchema],
 });
 
 const leagueSchema = new Schema({
   name: {
     type: String,
-    required,
+    required: true,
   },
   start: {
     type: String,
-    required,
   },
   end: {
     type: String,
-    required,
+  },
+  published: {
+    type: Boolean,
+    default: false,
   },
   groups: [groupSubSchema],
 });
