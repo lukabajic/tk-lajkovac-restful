@@ -1,8 +1,9 @@
-const { throwError, catchError } = require("./utility/errors");
-const db = require("./utility/db");
-const e = require("express");
+const DummyUser = require("../models/dummyUser");
 
-exports.createParticipant = async (req, res, next) => {
+const { catchError } = require("./utility/errors");
+const db = require("./utility/db");
+
+exports.addParticipant = async (req, res, next) => {
   const { leagueName, groupName, participantName, participantId } = req.body;
 
   try {
@@ -109,6 +110,36 @@ exports.deleteParticipant = async (req, res, next) => {
     res.status(200).json({
       statusCode: 200,
       message: "Učesnik uspešno obrisan.",
+    });
+  } catch (err) {
+    catchError(res, err);
+  }
+};
+
+exports.createDummyUser = async (req, res, next) => {
+  const { leagueName, groupName, participantName, participantPhone } = req.body;
+
+  try {
+    const dummyUser = await new DummyUser({
+      data: { displayName: participantName, phone: participantPhone },
+    }).save();
+
+    const league = await db.getLeague(leagueName);
+
+    const group = db.getGroup(league, groupName);
+
+    db.participantExists(group, dummyUser._id);
+
+    group.participants.push({
+      name: dummyUser.data.displayName,
+      userId: dummyUser._id,
+    });
+
+    await league.save();
+
+    res.status(200).json({
+      statusCode: 200,
+      message: `${participantName} je dodat u grupu ${groupName}, lige ${leagueName}.`,
     });
   } catch (err) {
     catchError(res, err);

@@ -25,42 +25,7 @@ const fixturesSubSchema = new Schema({
   },
 });
 
-const scheduleSubSchema = new Schema({
-  date: {
-    type: String,
-    required: true,
-  },
-  court: {
-    type: Number,
-    required: true,
-  },
-  time: {
-    type: String,
-    required: true,
-  },
-  scheduleId: {
-    type: Schema.Types.ObjectId,
-    required: true,
-  },
-});
-
-const userSchema = new Schema({
-  email: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  emailVerified: {
-    type: Boolean,
-    default: false,
-  },
-  isAdmin: {
-    type: Boolean,
-    default: false,
-  },
+const dummyUserSchema = new Schema({
   data: {
     displayName: {
       type: String,
@@ -70,12 +35,7 @@ const userSchema = new Schema({
       type: String,
       default: "",
     },
-    isPremium: {
-      type: Boolean,
-      default: false,
-    },
   },
-  schedule: [scheduleSubSchema],
   league: {
     leagueName: {
       type: String,
@@ -89,6 +49,6 @@ const userSchema = new Schema({
   },
 });
 
-const User = mongoose.model("User", userSchema);
+const DummyUser = mongoose.model("DummyUser", dummyUserSchema);
 
-module.exports = User;
+module.exports = DummyUser;
