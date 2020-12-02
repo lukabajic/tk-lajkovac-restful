@@ -1,5 +1,3 @@
-const DummyUser = require("../models/dummyUser");
-
 const { catchError } = require("./utility/errors");
 const db = require("./utility/db");
 
@@ -11,7 +9,7 @@ exports.addParticipant = async (req, res, next) => {
 
     const group = db.getGroup(league, groupName);
 
-    db.participantExists(group, participantId);
+    await db.participantExists(group, participantId);
 
     group.participants.push({ name: participantName, userId: participantId });
 
@@ -110,36 +108,6 @@ exports.deleteParticipant = async (req, res, next) => {
     res.status(200).json({
       statusCode: 200,
       message: "Učesnik uspešno obrisan.",
-    });
-  } catch (err) {
-    catchError(res, err);
-  }
-};
-
-exports.createDummyUser = async (req, res, next) => {
-  const { leagueName, groupName, participantName, participantPhone } = req.body;
-
-  try {
-    const dummyUser = await new DummyUser({
-      data: { displayName: participantName, phone: participantPhone },
-    }).save();
-
-    const league = await db.getLeague(leagueName);
-
-    const group = db.getGroup(league, groupName);
-
-    db.participantExists(group, dummyUser._id);
-
-    group.participants.push({
-      name: dummyUser.data.displayName,
-      userId: dummyUser._id,
-    });
-
-    await league.save();
-
-    res.status(200).json({
-      statusCode: 200,
-      message: `${participantName} je dodat u grupu ${groupName}, lige ${leagueName}.`,
     });
   } catch (err) {
     catchError(res, err);

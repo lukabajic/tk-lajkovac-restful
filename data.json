@@ -1,0 +1,605 @@
+{
+  "statusCode": 200,
+  "message": "Liga: Kategorija B je uspešno objavljena.",
+  "league": {
+    "published": true,
+    "_id": "5fc2162bcc066e225426a918",
+    "name": "Kategorija B",
+    "groups": [
+      {
+        "_id": "5fc216dccc066e225426a919",
+        "name": "B1",
+        "participants": [
+          {
+            "totals": {
+              "wins": 0,
+              "loses": 0,
+              "gamesWon": 0,
+              "gamesLost": 0
+            },
+            "_id": "5fc21a83c43cae27213b4604",
+            "name": "Matija Pavlovic",
+            "userId": "5fbc1f504a1a1b371349c91a"
+          },
+          {
+            "totals": {
+              "wins": 0,
+              "loses": 0,
+              "gamesWon": 0,
+              "gamesLost": 0
+            },
+            "_id": "5fc21a8ec43cae27213b4606",
+            "name": "Luka Bajic",
+            "userId": "5fc21a8dc43cae27213b4605"
+          },
+          {
+            "totals": {
+              "wins": 0,
+              "loses": 0,
+              "gamesWon": 0,
+              "gamesLost": 0
+            },
+            "_id": "5fc21a98c43cae27213b4608",
+            "name": "Zoran Pavlovic",
+            "userId": "5fc21a95c43cae27213b4607"
+          }
+        ],
+        "fixtures": [
+          {
+            "played": false,
+            "participantOneGames": 0,
+            "participantTwoGames": 0,
+            "_id": "5fc3893aeaec677a9a914aae",
+            "participantOne": "Matija Pavlovic",
+            "participantTwo": "Luka Bajic",
+            "participantOneId": "5fbc1f504a1a1b371349c91a",
+            "participantTwoId": "5fc21a8dc43cae27213b4605"
+          },
+          {
+            "played": false,
+            "participantOneGames": 0,
+            "participantTwoGames": 0,
+            "_id": "5fc3893aeaec677a9a914aaf",
+            "participantOne": "Matija Pavlovic",
+            "participantTwo": "Zoran Pavlovic",
+            "participantOneId": "5fbc1f504a1a1b371349c91a",
+            "participantTwoId": "5fc21a95c43cae27213b4607"
+          },
+          {
+            "played": false,
+            "participantOneGames": 0,
+            "participantTwoGames": 0,
+            "_id": "5fc3893aeaec677a9a914ab0",
+            "participantOne": "Luka Bajic",
+            "participantTwo": "Zoran Pavlovic",
+            "participantOneId": "5fc21a8dc43cae27213b4605",
+            "participantTwoId": "5fc21a95c43cae27213b4607"
+          }
+        ],
+        "scoreboard": [
+          {
+            "_id": "5fc3893aeaec677a9a914ab1",
+            "place": 0,
+            "participant": {
+              "totals": {
+                "wins": 0,
+                "loses": 0,
+                "gamesWon": 0,
+                "gamesLost": 0
+              },
+              "_id": "5fc21a83c43cae27213b4604",
+              "name": "Matija Pavlovic",
+              "userId": "5fbc1f504a1a1b371349c91a"
+            }
+          },
+          {
+            "_id": "5fc3893aeaec677a9a914ab3",
+            "place": 1,
+            "participant": {
+              "totals": {
+                "wins": 0,
+                "loses": 0,
+                "gamesWon": 0,
+                "gamesLost": 0
+              },
+              "_id": "5fc21a8ec43cae27213b4606",
+              "name": "Luka Bajic",
+              "userId": "5fc21a8dc43cae27213b4605"
+            }
+          },
+          {
+            "_id": "5fc3893aeaec677a9a914ab5",
+            "place": 2,
+            "participant": {
+              "totals": {
+                "wins": 0,
+                "loses": 0,
+                "gamesWon": 0,
+                "gamesLost": 0
+              },
+              "_id": "5fc21a98c43cae27213b4608",
+              "name": "Zoran Pavlovic",
+              "userId": "5fc21a95c43cae27213b4607"
+            }
+          }
+        ]
+      },
+      {
+        "_id": "5fc216eacc066e225426a91b",
+        "name": "B3",
+        "participants": [
+          {
+            "totals": {
+              "wins": 0,
+              "loses": 0,
+              "gamesWon": 0,
+              "gamesLost": 0
+            },
+            "_id": "5fc21967c43cae27213b45fd",
+            "name": "Jovica Jelic",
+            "userId": "5fc21966c43cae27213b45fc"
+          },
+          {
+            "totals": {
+              "wins": 0,
+              "loses": 0,
+              "gamesWon": 0,
+              "gamesLost": 0
+            },
+            "_id": "5fc219a1c43cae27213b45fe",
+            "name": "Nenad Milovanovic",
+            "userId": "5fbc1f784a1a1b371349c91b"
+          },
+          {
+            "totals": {
+              "wins": 0,
+              "loses": 0,
+              "gamesWon": 0,
+              "gamesLost": 0
+            },
+            "_id": "5fc219dfc43cae27213b45ff",
+            "name": "Marko Biljic",
+            "userId": "5fbc1f884a1a1b371349c91c"
+          },
+          {
+            "totals": {
+              "wins": 0,
+              "loses": 0,
+              "gamesWon": 0,
+              "gamesLost": 0
+            },
+            "_id": "5fc219ecc43cae27213b4601",
+            "name": "Nebojsa Markovic",
+            "userId": "5fc219ecc43cae27213b4600"
+          }
+        ],
+        "fixtures": [
+          {
+            "played": false,
+            "participantOneGames": 0,
+            "participantTwoGames": 0,
+            "_id": "5fc3893aeaec677a9a914ac9",
+            "participantOne": "Jovica Jelic",
+            "participantTwo": "Nenad Milovanovic",
+            "participantOneId": "5fc21966c43cae27213b45fc",
+            "participantTwoId": "5fbc1f784a1a1b371349c91b"
+          },
+          {
+            "played": false,
+            "participantOneGames": 0,
+            "participantTwoGames": 0,
+            "_id": "5fc3893aeaec677a9a914aca",
+            "participantOne": "Jovica Jelic",
+            "participantTwo": "Marko Biljic",
+            "participantOneId": "5fc21966c43cae27213b45fc",
+            "participantTwoId": "5fbc1f884a1a1b371349c91c"
+          },
+          {
+            "played": false,
+            "participantOneGames": 0,
+            "participantTwoGames": 0,
+            "_id": "5fc3893aeaec677a9a914acb",
+            "participantOne": "Jovica Jelic",
+            "participantTwo": "Nebojsa Markovic",
+            "participantOneId": "5fc21966c43cae27213b45fc",
+            "participantTwoId": "5fc219ecc43cae27213b4600"
+          },
+          {
+            "played": false,
+            "participantOneGames": 0,
+            "participantTwoGames": 0,
+            "_id": "5fc3893aeaec677a9a914acc",
+            "participantOne": "Nenad Milovanovic",
+            "participantTwo": "Marko Biljic",
+            "participantOneId": "5fbc1f784a1a1b371349c91b",
+            "participantTwoId": "5fbc1f884a1a1b371349c91c"
+          },
+          {
+            "played": false,
+            "participantOneGames": 0,
+            "participantTwoGames": 0,
+            "_id": "5fc3893aeaec677a9a914acd",
+            "participantOne": "Nenad Milovanovic",
+            "participantTwo": "Nebojsa Markovic",
+            "participantOneId": "5fbc1f784a1a1b371349c91b",
+            "participantTwoId": "5fc219ecc43cae27213b4600"
+          },
+          {
+            "played": false,
+            "participantOneGames": 0,
+            "participantTwoGames": 0,
+            "_id": "5fc3893aeaec677a9a914ace",
+            "participantOne": "Marko Biljic",
+            "participantTwo": "Nebojsa Markovic",
+            "participantOneId": "5fbc1f884a1a1b371349c91c",
+            "participantTwoId": "5fc219ecc43cae27213b4600"
+          }
+        ],
+        "scoreboard": [
+          {
+            "_id": "5fc3893aeaec677a9a914acf",
+            "place": 0,
+            "participant": {
+              "totals": {
+                "wins": 0,
+                "loses": 0,
+                "gamesWon": 0,
+                "gamesLost": 0
+              },
+              "_id": "5fc21967c43cae27213b45fd",
+              "name": "Jovica Jelic",
+              "userId": "5fc21966c43cae27213b45fc"
+            }
+          },
+          {
+            "_id": "5fc3893aeaec677a9a914ad1",
+            "place": 1,
+            "participant": {
+              "totals": {
+                "wins": 0,
+                "loses": 0,
+                "gamesWon": 0,
+                "gamesLost": 0
+              },
+              "_id": "5fc219a1c43cae27213b45fe",
+              "name": "Nenad Milovanovic",
+              "userId": "5fbc1f784a1a1b371349c91b"
+            }
+          },
+          {
+            "_id": "5fc3893aeaec677a9a914ad3",
+            "place": 2,
+            "participant": {
+              "totals": {
+                "wins": 0,
+                "loses": 0,
+                "gamesWon": 0,
+                "gamesLost": 0
+              },
+              "_id": "5fc219dfc43cae27213b45ff",
+              "name": "Marko Biljic",
+              "userId": "5fbc1f884a1a1b371349c91c"
+            }
+          },
+          {
+            "_id": "5fc3893aeaec677a9a914ad5",
+            "place": 3,
+            "participant": {
+              "totals": {
+                "wins": 0,
+                "loses": 0,
+                "gamesWon": 0,
+                "gamesLost": 0
+              },
+              "_id": "5fc219ecc43cae27213b4601",
+              "name": "Nebojsa Markovic",
+              "userId": "5fc219ecc43cae27213b4600"
+            }
+          }
+        ]
+      }
+    ],
+    "__v": 11
+  },
+  "users": [
+    {
+      "data": {
+        "displayName": "Matija Pavlovic",
+        "phone": "063 982 0611"
+      },
+      "league": {
+        "leagueName": "Kategorija B",
+        "groupName": "B1",
+        "fixtures": [
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914aa8",
+            "opponent": {
+              "name": "Luka Bajic",
+              "userId": "5fc21a8dc43cae27213b4605"
+            }
+          },
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914aa9",
+            "opponent": {
+              "name": "Zoran Pavlovic",
+              "userId": "5fc21a95c43cae27213b4607"
+            }
+          }
+        ]
+      },
+      "_id": "5fbc1f504a1a1b371349c91a",
+      "email": "bajicluka95@gmail.com",
+      "schedule": []
+    },
+    {
+      "data": {
+        "displayName": "Nenad Milovanovic",
+        "phone": "064 093 1722"
+      },
+      "league": {
+        "leagueName": "Kategorija B",
+        "groupName": "B3",
+        "fixtures": [
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914ac0",
+            "opponent": {
+              "name": "Jovica Jelic",
+              "userId": "5fc21966c43cae27213b45fc"
+            }
+          },
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914ac1",
+            "opponent": {
+              "name": "Marko Biljic",
+              "userId": "5fbc1f884a1a1b371349c91c"
+            }
+          },
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914ac2",
+            "opponent": {
+              "name": "Nebojsa Markovic",
+              "userId": "5fc219ecc43cae27213b4600"
+            }
+          }
+        ]
+      },
+      "_id": "5fbc1f784a1a1b371349c91b",
+      "email": "luka23bajic@gmail.com",
+      "schedule": []
+    },
+    {
+      "data": {
+        "displayName": "Marko Biljic",
+        "phone": "065 214 3833"
+      },
+      "league": {
+        "leagueName": "Kategorija B",
+        "groupName": "B3",
+        "category": "",
+        "fixtures": [
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914ac3",
+            "opponent": {
+              "name": "Jovica Jelic",
+              "userId": "5fc21966c43cae27213b45fc"
+            }
+          },
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914ac4",
+            "opponent": {
+              "name": "Nenad Milovanovic",
+              "userId": "5fbc1f784a1a1b371349c91b"
+            }
+          },
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914ac5",
+            "opponent": {
+              "name": "Nebojsa Markovic",
+              "userId": "5fc219ecc43cae27213b4600"
+            }
+          }
+        ],
+        "group": ""
+      },
+      "_id": "5fbc1f884a1a1b371349c91c",
+      "email": "lukabajic.dev@gmail.com",
+      "schedule": []
+    }
+  ],
+  "dummyUsers": [
+    {
+      "data": {
+        "displayName": "Jovica Jelic",
+        "phone": ""
+      },
+      "league": {
+        "leagueName": "Kategorija B",
+        "groupName": "B3",
+        "fixtures": [
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914abd",
+            "opponent": {
+              "name": "Nenad Milovanovic",
+              "userId": "5fbc1f784a1a1b371349c91b"
+            }
+          },
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914abe",
+            "opponent": {
+              "name": "Marko Biljic",
+              "userId": "5fbc1f884a1a1b371349c91c"
+            }
+          },
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914abf",
+            "opponent": {
+              "name": "Nebojsa Markovic",
+              "userId": "5fc219ecc43cae27213b4600"
+            }
+          }
+        ]
+      },
+      "_id": "5fc21966c43cae27213b45fc"
+    },
+    {
+      "data": {
+        "displayName": "Nebojsa Markovic",
+        "phone": ""
+      },
+      "league": {
+        "leagueName": "Kategorija B",
+        "groupName": "B3",
+        "fixtures": [
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914ac6",
+            "opponent": {
+              "name": "Jovica Jelic",
+              "userId": "5fc21966c43cae27213b45fc"
+            }
+          },
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914ac7",
+            "opponent": {
+              "name": "Nenad Milovanovic",
+              "userId": "5fbc1f784a1a1b371349c91b"
+            }
+          },
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914ac8",
+            "opponent": {
+              "name": "Marko Biljic",
+              "userId": "5fbc1f884a1a1b371349c91c"
+            }
+          }
+        ]
+      },
+      "_id": "5fc219ecc43cae27213b4600"
+    },
+    {
+      "data": {
+        "displayName": "Luka Bajic",
+        "phone": ""
+      },
+      "league": {
+        "leagueName": "Kategorija B",
+        "groupName": "B1",
+        "fixtures": [
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914aaa",
+            "opponent": {
+              "name": "Matija Pavlovic",
+              "userId": "5fbc1f504a1a1b371349c91a"
+            }
+          },
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914aab",
+            "opponent": {
+              "name": "Zoran Pavlovic",
+              "userId": "5fc21a95c43cae27213b4607"
+            }
+          }
+        ]
+      },
+      "_id": "5fc21a8dc43cae27213b4605"
+    },
+    {
+      "data": {
+        "displayName": "Zoran Pavlovic",
+        "phone": ""
+      },
+      "league": {
+        "leagueName": "Kategorija B",
+        "groupName": "B1",
+        "fixtures": [
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914aac",
+            "opponent": {
+              "name": "Matija Pavlovic",
+              "userId": "5fbc1f504a1a1b371349c91a"
+            }
+          },
+          {
+            "score": {
+              "playerGames": 0,
+              "opponentGames": 0
+            },
+            "_id": "5fc3893aeaec677a9a914aad",
+            "opponent": {
+              "name": "Luka Bajic",
+              "userId": "5fc21a8dc43cae27213b4605"
+            }
+          }
+        ]
+      },
+      "_id": "5fc21a95c43cae27213b4607"
+    }
+  ]
+}

@@ -32,11 +32,4 @@ router.delete(
   leagueParticipantController.deleteParticipant
 );
 
-router.put(
-  "/create-dummy",
-  isAuth,
-  isAdmin,
-  leagueParticipantController.createDummyUser
-);
-
 module.exports = router;

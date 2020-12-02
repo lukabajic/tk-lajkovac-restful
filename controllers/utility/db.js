@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 
 const League = require("../../models/league");
 const User = require("../../models/user");
+const DummyUser = require("../../models/dummyUser");
 const ScheduleDay = require("../../models/scheduleDay");
 const CourtSchedule = require("../../models/courtSchedule");
 
@@ -15,6 +16,8 @@ exports.allGroupMatches = (participants) => {
       fixtures.push({
         participantOne: participants[first].name,
         participantTwo: participants[second].name,
+        participantOneId: participants[first].userId,
+        participantTwoId: participants[second].userId,
       });
     }
   }
@@ -22,9 +25,47 @@ exports.allGroupMatches = (participants) => {
   return fixtures;
 };
 
-// if (group.participants.length > 1) {
-//   group.fixtures = allGroupMatches(group.participants);
-// }
+exports.allParticipantMatches = (participants, participant) => {
+  const opponents = participants.filter(
+    (el) => el.userId.toString() !== participant.userId.toString()
+  );
+  const fixtures = [];
+
+  opponents.forEach((opponent) => {
+    fixtures.push({
+      opponent: {
+        name: opponent.name,
+        userId: opponent.userId,
+      },
+    });
+  });
+
+  return fixtures;
+};
+
+exports.scoreboard = (participants) => {
+  participants.sort((first, second) => {
+    if (first.totals.wins === second.totals.wins) {
+      const firstDifference = first.totals.gamesWon - first.totals.gamesLost;
+      const secondDifference = second.totals.gamesWon - second.totals.gamesLost;
+
+      if (firstDifference === secondDifference) {
+        return 0;
+      }
+
+      return firstDifference > secondDifference ? -1 : 1;
+    }
+
+    return first.totals.wins > second.totals.wins ? -1 : 1;
+  });
+
+  const scoreboard = participants.map((el, i) => ({
+    place: i,
+    participant: el,
+  }));
+
+  return scoreboard;
+};
 
 exports.leagueExists = async (name) => {
   const check = await League.findOne({ name });
@@ -71,8 +112,18 @@ exports.getParticipant = (group, participantId) => {
   return participant;
 };
 
-exports.participantExists = (group, participantId) => {
-  const participant = group.participants.find(
+exports.participantExists = async (groupArg, participantId) => {
+  const leagues = await League.find();
+  leagues.forEach((league) => {
+    league.groups.forEach((group) => {
+      group.participants.forEach((participant) => {
+        participant.userId.toString() === participantId &&
+          throwError("Učesnik postoji u drugoj grupi ili ligi.", 409);
+      });
+    });
+  });
+
+  const participant = groupArg.participants.find(
     (el) => el.userId.toString() === participantId
   );
   participant && throwError("Učesnik već u grupi.", 409);
@@ -156,6 +207,13 @@ exports.getUser = async (id) => {
   return user;
 };
 
+exports.getDummyUser = async (id) => {
+  const user = await DummyUser.findById(id);
+  !user && throwError("Korisnik ne postoji u našoj bazi.", 404);
+
+  return user;
+};
+
 exports.getUserByEmail = async (email) => {
   const user = await User.findOne({ email });
   !user && throwError("Email ne postoji u našoj bazi.", 404);
@@ -165,8 +223,15 @@ exports.getUserByEmail = async (email) => {
 
 exports.getUsers = async () => {
   const users = await User.find().select(
-    "-password -emailVerified -isAdmin -__v -avatarUrl -data.isPremium"
+    "-password -emailVerified -isAdmin -__v -data.isPremium"
   );
+  !users && throwError("Došlo je do greške prilikom pretrage korisnika.", 404);
+
+  return users;
+};
+
+exports.getDummyUsers = async () => {
+  const users = await DummyUser.find().select("-__v");
   !users && throwError("Došlo je do greške prilikom pretrage korisnika.", 404);
 
   return users;
@@ -179,7 +244,7 @@ exports.passwordMatches = async (enteredPassword, userPassword) => {
 
 exports.courtScheduleExists = async (number) => {
   const check = await CourtSchedule.findOne({ number });
-  check && throwError("Teren već ima raspored termina.", 400);
+  check && throwError("Teren već ima raspored termina.", 409);
 };
 
 exports.getCourt = async (number) => {

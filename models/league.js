@@ -15,6 +15,14 @@ const fixtureSubSchema = new Schema({
     type: String,
     required: true,
   },
+  participantOneId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+  },
+  participantTwoId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+  },
   participantOneGames: {
     type: Number,
     default: 0,
@@ -59,10 +67,7 @@ const participantRankSubSchema = new Schema({
     type: Number,
     required: true,
   },
-  participantId: {
-    type: Schema.Types.ObjectId,
-    required: true,
-  },
+  participant: participantSubSchema,
 });
 
 const groupSubSchema = new Schema({

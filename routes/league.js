@@ -17,4 +17,8 @@ router.post("/edit", isAuth, isAdmin, leagueController.editLeague);
 
 router.delete("/delete", isAuth, isAdmin, leagueController.deleteLeague);
 
+router.put("/publish", isAuth, isAdmin, leagueController.leaguePublish);
+
+router.post("/result", isAuth, isAdmin, leagueController.matchScore);
+
 module.exports = router;

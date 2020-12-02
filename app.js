@@ -10,6 +10,7 @@ const userRoutes = require("./routes/user");
 const leagueRoutes = require("./routes/league");
 const leagueGroupRoutes = require("./routes/leagueGroup");
 const leagueParticipantRoutes = require("./routes/leagueParticipant");
+const leagueDummyRoutes = require("./routes/leagueDummy");
 const scheduleDayRoutes = require("./routes/scheduleDay");
 const courtScheduleRoutes = require("./routes/courtSchedule");
 
@@ -60,6 +61,7 @@ app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/league", leagueRoutes);
 app.use("/api/v1/league/group", leagueGroupRoutes);
 app.use("/api/v1/league/participant", leagueParticipantRoutes);
+app.use("/api/v1/league/dummy", leagueDummyRoutes);
 app.use("/api/v1/schedule-day", scheduleDayRoutes);
 app.use("/api/v1/court-schedule", courtScheduleRoutes);
 
