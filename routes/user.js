@@ -10,7 +10,7 @@ router.get("/get", isAuth, userController.getUser);
 
 router.get("/get-all", isAuth, userController.getAllUsers);
 
-router.get("/verify-email/:token", isAuth, userController.verifyUserEmail);
+router.get("/verify-email/:token", userController.verifyUserEmail);
 
 router.post("/resend", isAuth, userController.resendVerificationEmail);
 
