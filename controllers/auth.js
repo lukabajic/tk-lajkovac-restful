@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 
 const User = require("../models/user");
 
-const generateToken = require("./utility/jwt");
+const { generateToken } = require("./utility/jwt");
 const { sendVerificationMail } = require("./utility/sendgrid");
 const { userData } = require("./utility/userData");
 const db = require("./utility/db");

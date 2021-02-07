@@ -4,6 +4,7 @@ const { throwError, catchError } = require("./utility/errors");
 const { userData } = require("./utility/userData");
 const db = require("./utility/db");
 const { sendVerificationMail } = require("./utility/sendgrid");
+const { getUserId } = require("./utility/jwt");
 
 exports.getUser = async (req, res, next) => {
   const userId = req.query.userId || req.userId;
@@ -36,7 +37,8 @@ exports.getAllUsers = async (req, res, next) => {
 };
 
 exports.verifyUserEmail = async (req, res, next) => {
-  const { userId } = req;
+  const { token } = req.params;
+  const userId = getUserId(token);
 
   try {
     const user = await db.getUser(userId);
