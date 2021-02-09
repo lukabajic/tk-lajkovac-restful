@@ -24,6 +24,8 @@ const ROOT_URL = `http://localhost:${port}`;
 
 const app = express();
 
+app.set("view engine", "ejs");
+
 // database options
 const MONGO_URL = process.env.MONGO_URL;
 const options = {

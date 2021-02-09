@@ -43,16 +43,13 @@ exports.verifyUserEmail = async (req, res, next) => {
   try {
     const user = await db.getUser(userId);
 
-    user.emailVerified && throwError("Nalog je već potvrđen.", 409);
+    res.render("verification-success", { already: true });
 
     user.emailVerified = true;
 
     await user.save();
 
-    res.status(200).json({
-      statusCode: 200,
-      message: "Nalog je uspešno potvrđen.",
-    });
+    res.render("verification-success", { already: false });
   } catch (err) {
     catchError(res, err);
   }
