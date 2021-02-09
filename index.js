@@ -26,6 +26,10 @@ const app = express();
 
 app.set("view engine", "ejs");
 
+app.get("/", (req, res) => {
+  res.render("index");
+});
+
 // database options
 const MONGO_URL = process.env.MONGO_URL;
 const options = {
