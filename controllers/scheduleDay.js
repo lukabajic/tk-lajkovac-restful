@@ -117,6 +117,8 @@ exports.editDaySchedule = async (req, res, next) => {
     res.status(200).json({
       statusCode: 200,
       message: `Termin uspešno ${action === "cancel" ? "otkazan" : "zakazan"}.`,
+      editedScheduleDay,
+      editedUser,
     });
   } catch (err) {
     catchError(res, err);
