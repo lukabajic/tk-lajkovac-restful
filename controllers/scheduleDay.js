@@ -152,16 +152,25 @@ exports.deleteScheduleDay = async (req, res, next) => {
 exports.midnightUpdateSchedule = async () => {
   const { yesterday, dayAfter } = getDates();
 
-  const courts = await db.getAllCourts();
-  const yesterdaySchedule = await db.getSchedule(yesterday);
+  try {
+    const courts = await db.getAllCourts();
+    const yesterdaySchedule = await db.getSchedule(yesterday);
 
-  const dayAfterSchedule = new Schedule({
-    date: dayAfter,
-    courts,
-  });
+    const dayAfterSchedule = new Schedule({
+      date: dayAfter,
+      courts,
+    });
 
-  await dayAfterSchedule.save();
-  await yesterdaySchedule.remove();
+    await dayAfterSchedule.save();
+    await yesterdaySchedule.remove();
+
+    res.status(200).json({
+      statusCode: 200,
+      message: "Bravo",
+    });
+  } catch (err) {
+    catchError(res, err);
+  }
 };
 
 // exports.getSchedule = async (req, res, next) => {
