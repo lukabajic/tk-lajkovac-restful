@@ -149,19 +149,20 @@ exports.deleteScheduleDay = async (req, res, next) => {
   }
 };
 
-// exports.midnightUpdateSchedule = async () => {
-//   const { yesterday, dayAfter } = getDates();
+exports.midnightUpdateSchedule = async () => {
+  const { yesterday, dayAfter } = getDates();
 
-//   const court1 = await Court.findOne({ number: 1 });
-//   const court2 = await Court.findOne({ number: 2 });
-//   const court3 = await Court.findOne({ number: 3 });
+  const courts = await db.getAllCourts();
+  const yesterdaySchedule = await db.getSchedule(yesterday);
 
-//   const dayAfterSchedule = new Schedule({
-//     date: dayAfter,
-//     courts: { 1: court1.times, 2: court2.times, 3: court3.times },
-//   });
-//   await dayAfterSchedule.save();
-// };
+  const dayAfterSchedule = new Schedule({
+    date: dayAfter,
+    courts,
+  });
+
+  await dayAfterSchedule.save();
+  await yesterdaySchedule.remove();
+};
 
 // exports.getSchedule = async (req, res, next) => {
 //   try {
