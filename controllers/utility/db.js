@@ -222,9 +222,7 @@ exports.getUserByEmail = async (email) => {
 };
 
 exports.getUsers = async () => {
-  const users = await User.find().select(
-    "-password -emailVerified -isAdmin -__v -data.isPremium"
-  );
+  const users = await User.find();
   !users && throwError("Došlo je do greške prilikom pretrage korisnika.", 404);
 
   return users;

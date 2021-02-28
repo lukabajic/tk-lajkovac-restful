@@ -5,6 +5,7 @@ const { userData } = require("./utility/userData");
 const db = require("./utility/db");
 const { sendVerificationMail } = require("./utility/sendgrid");
 const { getUserId } = require("./utility/jwt");
+const getDates = require("./utility/getDates");
 
 exports.getUser = async (req, res, next) => {
   const userId = req.query.userId || req.userId;
@@ -151,18 +152,19 @@ exports.giveUserPremiumPermissions = async (req, res, next) => {
   }
 };
 
-exports.cancelUserMatch = async (req, res, next) => {};
+// exports.cancelUserMatch = async (req, res, next) => {};
 
-// exports.midnightUpdateUser = async () => {
-//   const users = await User.find();
-//   !users && throwError("Nismo pronašli korisnike u našoj bazi.", 404);
+exports.midnightUpdateUsers = async (req, res, next) => {
+  const { yesterday } = getDates();
 
-//   users.forEach(async (user) => {
-//     user.scheduled = {
-//       0: user.scheduled[1],
-//       1: user.scheduled[2],
-//       2: null,
-//     };
-//     await user.save();
-//   });
-// };
+  try {
+    const users = await db.getUsers();
+
+    users.forEach(async (user) => {
+      user.schedule = user.schedule.filter((s) => s.date !== yesterday);
+      await user.save();
+    });
+
+    res.status(201).json({ msg: "Bravo" });
+  } catch (err) {}
+};

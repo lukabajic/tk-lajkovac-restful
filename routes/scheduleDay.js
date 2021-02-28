@@ -22,6 +22,4 @@ router.delete(
   scheduleDayController.deleteScheduleDay
 );
 
-router.post("/midnight", scheduleDayController.midnightUpdateSchedule);
-
 module.exports = router;
