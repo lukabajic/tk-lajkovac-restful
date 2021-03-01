@@ -56,10 +56,14 @@ app.use((req, res, next) => {
 });
 
 // DB daily updates
-cron.schedule("30 19 * * *", () => {
-  midnightUpdateSchedule();
-  midnightUpdateUsers();
-});
+cron.schedule(
+  "41 19 * * *",
+  () => {
+    midnightUpdateSchedule();
+    midnightUpdateUsers();
+  },
+  { timezone: "Europe/Belgrade" }
+);
 
 // use routes
 app.use("/api/v1/auth", authRoutes);
@@ -72,17 +76,22 @@ app.use("/api/v1/schedule-day", scheduleDayRoutes);
 app.use("/api/v1/court-schedule", courtScheduleRoutes);
 
 mongoose
-  .connect(MONGO_URL, options)
+  .connect(
+    process.env.CONFIG === "dev"
+      ? "mongodb+srv://lukabajic23:Zuccher0@cluster0.inl6y.mongodb.net/tk-lajkovac?retryWrites=true"
+      : MONGO_URL,
+    options
+  )
   .then(() => {
     const server = app.listen(port, (err) => {
       if (err) {
         throw err;
       }
-      console.log(`> Ready on ${ROOT_URL}`);
+      process.env.CONFIG === "dev" && console.log(`> Ready on ${ROOT_URL}`);
     });
     const io = require("./socket").init(server);
     io.on("connection", (socket) => {
-      console.log("Client connected.");
+      process.env.CONFIG === "dev" && console.log("Client connected.");
     });
   })
   .catch((err) => console.log(err));
