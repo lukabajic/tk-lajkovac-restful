@@ -57,7 +57,7 @@ app.use((req, res, next) => {
 
 // DB daily updates
 cron.schedule(
-  "41 19 * * *",
+  "0 0 * * *",
   () => {
     midnightUpdateSchedule();
     midnightUpdateUsers();
