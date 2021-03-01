@@ -56,7 +56,7 @@ app.use((req, res, next) => {
 });
 
 // DB daily updates
-cron.schedule("18 19 * * *", () => {
+cron.schedule("21 18 * * *", () => {
   midnightUpdateSchedule();
   midnightUpdateUsers();
 });
@@ -72,10 +72,7 @@ app.use("/api/v1/schedule-day", scheduleDayRoutes);
 app.use("/api/v1/court-schedule", courtScheduleRoutes);
 
 mongoose
-  .connect(
-    "mongodb+srv://lukabajic23:Zuccher0@cluster0.inl6y.mongodb.net/tk-lajkovac?retryWrites=true",
-    options
-  )
+  .connect(MONGO_URL, options)
   .then(() => {
     const server = app.listen(port, (err) => {
       if (err) {
