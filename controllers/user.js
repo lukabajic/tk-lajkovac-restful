@@ -44,7 +44,7 @@ exports.verifyUserEmail = async (req, res, next) => {
   try {
     const user = await db.getUser(userId);
 
-    res.render("verification-success", { already: true });
+    user.emailVerified && res.render("verification-success", { already: true });
 
     user.emailVerified = true;
 
