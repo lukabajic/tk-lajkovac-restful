@@ -76,12 +76,7 @@ app.use("/api/v1/schedule-day", scheduleDayRoutes);
 app.use("/api/v1/court-schedule", courtScheduleRoutes);
 
 mongoose
-  .connect(
-    process.env.CONFIG === "dev"
-      ? "mongodb+srv://lukabajic23:Zuccher0@cluster0.inl6y.mongodb.net/tk-lajkovac?retryWrites=true"
-      : MONGO_URL,
-    options
-  )
+  .connect(process.env.MONGO_URL, options)
   .then(() => {
     const server = app.listen(port, (err) => {
       if (err) {

@@ -3,9 +3,11 @@ const bcrypt = require("bcryptjs");
 const { throwError, catchError } = require("./utility/errors");
 const { userData } = require("./utility/userData");
 const db = require("./utility/db");
-const { sendVerificationMail } = require("./utility/sendgrid");
+const { sendVerificationMail, passwordMail } = require("./utility/sendgrid");
 const { getUserId } = require("./utility/jwt");
 const getDates = require("./utility/getDates");
+
+const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
 exports.getUser = async (req, res, next) => {
   const userId = req.query.userId || req.userId;
@@ -51,6 +53,29 @@ exports.verifyUserEmail = async (req, res, next) => {
     await user.save();
 
     res.render("verification-success", { already: false });
+  } catch (err) {
+    catchError(res, err);
+  }
+};
+
+exports.resetPassword = async (req, res, next) => {
+  const { email } = req.body;
+
+  try {
+    const user = await db.getUserByEmail(email);
+
+    const pw = capitalize(Math.random().toString(36).slice(-8));
+    const hashedPassword = await bcrypt.hash(pw, 12);
+
+    user.password = hashedPassword;
+
+    await passwordMail(email, pw);
+    await user.save();
+
+    res.status(200).json({
+      statusCode: 200,
+      message: "Šifra uspešno promenjena.",
+    });
   } catch (err) {
     catchError(res, err);
   }
