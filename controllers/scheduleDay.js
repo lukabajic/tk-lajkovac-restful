@@ -149,7 +149,7 @@ exports.deleteScheduleDay = async (req, res, next) => {
   }
 };
 
-exports.midnightUpdateSchedule = async (req, res, next) => {
+exports.midnightUpdateSchedule = async () => {
   const { yesterday, dayAfter } = getDates();
 
   try {
@@ -163,7 +163,9 @@ exports.midnightUpdateSchedule = async (req, res, next) => {
 
     await dayAfterSchedule.save();
     await yesterdaySchedule.remove();
-  } catch (err) {}
+  } catch (err) {
+    console.warn(err);
+  }
 };
 
 // exports.getSchedule = async (req, res, next) => {
