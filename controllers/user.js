@@ -132,6 +132,7 @@ exports.updateUserData = async (req, res, next) => {
     res.status(200).json({
       statusCode: 200,
       message: "Podaci uspešno sačuvani.",
+      user,
     });
   } catch (err) {
     catchError(res, err);
