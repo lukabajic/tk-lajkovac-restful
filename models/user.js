@@ -75,6 +75,7 @@ const userSchema = new Schema({
       default: false,
     },
   },
+  additionalData: {},
   schedule: [scheduleSubSchema],
   league: {
     leagueName: {

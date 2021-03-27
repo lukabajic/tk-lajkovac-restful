@@ -113,7 +113,7 @@ exports.updateUserData = async (req, res, next) => {
         await sendVerificationMail(token, payload.email);
         break;
       case "UPDATE_PASSWORD":
-        await db.passwordMatches(payload.password, payload.oldPassword);
+        await db.passwordMatches(user.password, payload.oldPassword);
         const hashedPassword = await bcrypt.hash(payload.password, 12);
         user.password = hashedPassword;
         break;
