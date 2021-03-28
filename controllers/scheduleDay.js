@@ -6,6 +6,7 @@ const getDates = require("./utility/getDates");
 
 const { catchError } = require("./utility/errors");
 const db = require("./utility/db");
+const { userData } = require("./utility/userData");
 
 exports.createScheduleDay = async (req, res, next) => {
   const { day } = req.body;
@@ -110,8 +111,8 @@ exports.editDaySchedule = async (req, res, next) => {
 
     io.get().emit("schedule", {
       action: "edit",
-      editedScheduleDay,
-      editedUser,
+      scheduleDay: editedScheduleDay,
+      user: userData(editedUser),
     });
 
     res.status(200).json({
@@ -137,7 +138,7 @@ exports.deleteScheduleDay = async (req, res, next) => {
 
     io.get().emit("schedule", {
       action: "delete",
-      scheduleDay,
+      date: scheduleDay.date,
     });
 
     res.status(200).json({
