@@ -68,8 +68,49 @@ exports.getAllScheduleDays = async (req, res, next) => {
   }
 };
 
+exports.adminEditSchedule = async (req, res) => {
+  const { day, court, start: time, userName, action } = req.body;
+
+  const dates = getDates();
+
+  try {
+    const scheduleDay = await db.getSchedule(dates[day]);
+
+    const courtToUpdate = db.getScheduleDayCourt(scheduleDay, court);
+
+    const timeToUpdate = db.getScheduleDayTime(courtToUpdate, time);
+
+    if (action === "cancel") {
+      db.isTimeNotTaken(timeToUpdate);
+
+      timeToUpdate.taken = false;
+      timeToUpdate.userName = null;
+    } else {
+      db.isTimeTaken(timeToUpdate);
+
+      timeToUpdate.taken = true;
+      timeToUpdate.userName = userName;
+    }
+
+    const editedScheduleDay = await scheduleDay.save();
+
+    io.get().emit("schedule", {
+      action: "edit",
+      scheduleDay: editedScheduleDay,
+    });
+
+    res.status(200).json({
+      statusCode: 200,
+      message: `Termin uspešno ${action === "cancel" ? "otkazan" : "zakazan"}.`,
+      editedScheduleDay,
+    });
+  } catch (err) {
+    catchError(res, err);
+  }
+};
+
 exports.editDaySchedule = async (req, res, next) => {
-  const { day, court, time, action } = req.body;
+  const { day, court, start: time, action } = req.body;
   const { userId } = req;
 
   const dates = getDates();

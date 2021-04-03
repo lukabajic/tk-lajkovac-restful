@@ -7,6 +7,7 @@ const timeSubSchema = new Schema({
   end: { type: String, required: true },
   taken: { type: Boolean, default: false },
   userId: { type: Schema.Types.ObjectId, default: null },
+  userName: { type: String, default: null },
 });
 
 const scheduleSchema = new Schema({

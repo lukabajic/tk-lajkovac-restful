@@ -15,6 +15,13 @@ router.get("/get-all", isAuth, scheduleDayController.getAllScheduleDays);
 
 router.post("/edit", isAuth, scheduleDayController.editDaySchedule);
 
+router.post(
+  "/edit-admin",
+  isAuth,
+  isAdmin,
+  scheduleDayController.adminEditSchedule
+);
+
 router.delete(
   "/delete",
   isAuth,
