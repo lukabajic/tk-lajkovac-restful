@@ -82,6 +82,7 @@ mongoose
       if (err) {
         throw err;
       }
+      console.log("started");
       process.env.CONFIG === "dev" && console.log(`> Ready on ${ROOT_URL}`);
     });
     const io = require("./socket").init(server);
