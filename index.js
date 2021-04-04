@@ -1,6 +1,5 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cron = require("node-cron");
 
 require("dotenv").config();
 
@@ -17,6 +16,8 @@ const courtScheduleRoutes = require("./routes/courtSchedule");
 // util
 const { midnightUpdateSchedule } = require("./controllers/scheduleDay");
 const { midnightUpdateUsers } = require("./controllers/user");
+const { catchError } = require("./controllers/utility/errors");
+const isAuth = require("./middleware/isAuth");
 
 // where to run server
 const port = process.env.PORT || 8000;
@@ -55,16 +56,21 @@ app.use((req, res, next) => {
   next();
 });
 
-// DB daily updates
-cron.schedule(
-  "29 8 */1 * *",
-  () => {
-    console.log("update");
-    midnightUpdateSchedule();
-    midnightUpdateUsers();
-  },
-  { timezone: "Europe/Belgrade" }
-);
+app.post("/api/v1/midnight-update", isAuth, async (req, res) => {
+  try {
+    const schedule = await midnightUpdateSchedule();
+    const users = await midnightUpdateUsers();
+
+    res.status(201).json({
+      statusCode: 201,
+      message: "Schedule updated.",
+      users,
+      schedule,
+    });
+  } catch (err) {
+    catchError(res, err);
+  }
+});
 
 // use routes
 app.use("/api/v1/auth", authRoutes);

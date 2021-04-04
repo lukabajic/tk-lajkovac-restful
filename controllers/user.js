@@ -190,6 +190,8 @@ exports.midnightUpdateUsers = async (req, res, next) => {
       await user.save();
     });
 
-    res.status(201).json({ msg: "Bravo" });
-  } catch (err) {}
+    return users;
+  } catch (err) {
+    catchError(res, err);
+  }
 };

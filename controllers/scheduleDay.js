@@ -205,8 +205,10 @@ exports.midnightUpdateSchedule = async () => {
 
     await dayAfterSchedule.save();
     await yesterdaySchedule.remove();
+
+    return await db.getAllSchedues();
   } catch (err) {
-    console.warn(err);
+    catchError(res, err);
   }
 };
 
