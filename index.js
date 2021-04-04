@@ -56,11 +56,15 @@ app.use((req, res, next) => {
 });
 
 // DB daily updates
-cron.schedule("40 9 * * *", () => {
-  console.log("run cron");
-  midnightUpdateSchedule();
-  midnightUpdateUsers();
-});
+cron.schedule(
+  "42 9 * * *",
+  () => {
+    console.log("run cron");
+    midnightUpdateSchedule();
+    midnightUpdateUsers();
+  },
+  { timezone: "Europe/Belgrade" }
+);
 
 // use routes
 app.use("/api/v1/auth", authRoutes);
