@@ -1,4 +1,4 @@
-const sendgrid = require("@sendgrid/mail");
+const sendgrid = require('@sendgrid/mail');
 
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -11,15 +11,15 @@ const passwordHtml = (password) =>
 exports.passwordMail = (email, password) =>
   sendgrid.send({
     to: email,
-    from: "me@lukabajic.dev",
-    subject: "Nova lozinka",
+    from: 'lukabajic23@gmail.com',
+    subject: 'Nova lozinka',
     html: passwordHtml(password),
   });
 
 exports.sendVerificationMail = (token, email) =>
   sendgrid.send({
     to: email,
-    from: "me@lukabajic.dev",
-    subject: "Potvrda email adrese",
+    from: 'lukabajic23@gmail.com',
+    subject: 'Potvrda email adrese',
     html: verifyEmailHtml(token),
   });
