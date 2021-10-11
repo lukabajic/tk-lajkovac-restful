@@ -1,12 +1,12 @@
-const io = require("../socket");
+const io = require('../socket');
 
-const ScheduleDay = require("../models/scheduleDay");
+const ScheduleDay = require('../models/scheduleDay');
 
-const getDates = require("./utility/getDates");
+const getDates = require('./utility/getDates');
 
-const { catchError } = require("./utility/errors");
-const db = require("./utility/db");
-const { userData } = require("./utility/userData");
+const { catchError } = require('./utility/errors');
+const db = require('./utility/db');
+const { userData } = require('./utility/userData');
 
 exports.createScheduleDay = async (req, res, next) => {
   const { day } = req.body;
@@ -24,8 +24,8 @@ exports.createScheduleDay = async (req, res, next) => {
     });
     await scheduleDay.save();
 
-    io.get().emit("schedule", {
-      action: "create",
+    io.get().emit('schedule', {
+      action: 'create',
       scheduleDay,
     });
 
@@ -68,6 +68,67 @@ exports.getAllScheduleDays = async (req, res, next) => {
   }
 };
 
+exports.getQuickSchedule = async (req, res, next) => {
+  try {
+    const scheduleDays = await db.getAllSchedues();
+
+    if (
+      !scheduleDays ||
+      (Array.isArray(scheduleDays) && scheduleDays.length === 0)
+    ) {
+      res.status(200).json({
+        statusCode: 200,
+        times: [],
+      });
+    }
+
+    const courts = scheduleDays.find(
+      (d) => d.date === new Date().toDateString()
+    ).courts;
+
+    const times = [];
+
+    courts.forEach((c) =>
+      c.times.forEach((t) => {
+        if (t.taken) return;
+
+        const hours = new Date().getHours();
+        const startHour = Number(t.start.slice(0, 2));
+
+        if (hours === startHour) {
+          const minutes = new Date().getMinutes();
+          const startMinute = Number(t.start.slice(2, 4));
+
+          if (minutes > startMinute) return;
+        }
+
+        if (hours > startHour) return;
+
+        t.court = c.number;
+        times.push(t);
+      })
+    );
+
+    times.sort((a, b) => {
+      const aHours = Number(a.start.slice(0, 2));
+      const bHours = Number(b.start.slice(0, 2));
+      const aMinutes = Number(a.start.slice(2, 4));
+      const bMinutes = Number(b.start.slice(2, 4));
+
+      if (aHours === bHours) return aMinutes - bMinutes;
+
+      return aHours - bHours;
+    });
+
+    res.status(200).json({
+      statusCode: 200,
+      times: times.slice(0, 3),
+    });
+  } catch (err) {
+    catchError(res, err);
+  }
+};
+
 exports.adminEditSchedule = async (req, res) => {
   const { day, court, start: time, userName, action } = req.body;
 
@@ -80,7 +141,7 @@ exports.adminEditSchedule = async (req, res) => {
 
     const timeToUpdate = db.getScheduleDayTime(courtToUpdate, time);
 
-    if (action === "cancel") {
+    if (action === 'cancel') {
       db.isTimeNotTaken(timeToUpdate);
 
       timeToUpdate.taken = false;
@@ -94,14 +155,14 @@ exports.adminEditSchedule = async (req, res) => {
 
     const editedScheduleDay = await scheduleDay.save();
 
-    io.get().emit("schedule", {
-      action: "edit",
+    io.get().emit('schedule', {
+      action: 'edit',
       scheduleDay: editedScheduleDay,
     });
 
     res.status(200).json({
       statusCode: 200,
-      message: `Termin uspešno ${action === "cancel" ? "otkazan" : "zakazan"}.`,
+      message: `Termin uspešno ${action === 'cancel' ? 'otkazan' : 'zakazan'}.`,
       editedScheduleDay,
     });
   } catch (err) {
@@ -124,7 +185,7 @@ exports.editDaySchedule = async (req, res, next) => {
 
     const timeToUpdate = db.getScheduleDayTime(courtToUpdate, time);
 
-    if (action === "cancel") {
+    if (action === 'cancel') {
       db.isTimeNotTaken(timeToUpdate);
 
       timeToUpdate.taken = false;
@@ -150,15 +211,15 @@ exports.editDaySchedule = async (req, res, next) => {
     const editedScheduleDay = await scheduleDay.save();
     const editedUser = await user.save();
 
-    io.get().emit("schedule", {
-      action: "edit",
+    io.get().emit('schedule', {
+      action: 'edit',
       scheduleDay: editedScheduleDay,
       user: userData(editedUser),
     });
 
     res.status(200).json({
       statusCode: 200,
-      message: `Termin uspešno ${action === "cancel" ? "otkazan" : "zakazan"}.`,
+      message: `Termin uspešno ${action === 'cancel' ? 'otkazan' : 'zakazan'}.`,
       editedScheduleDay,
       editedUser,
     });
@@ -177,8 +238,8 @@ exports.deleteScheduleDay = async (req, res, next) => {
 
     await scheduleDay.remove();
 
-    io.get().emit("schedule", {
-      action: "delete",
+    io.get().emit('schedule', {
+      action: 'delete',
       date: scheduleDay.date,
     });
 
@@ -186,27 +247,6 @@ exports.deleteScheduleDay = async (req, res, next) => {
       statusCode: 200,
       message: `Raspored za ${dates[day]} je uspešno obrisan.`,
     });
-  } catch (err) {
-    catchError(res, err);
-  }
-};
-
-exports.midnightUpdateSchedule = async () => {
-  const { yesterday, dayAfter } = getDates();
-
-  try {
-    const courts = await db.getAllCourts();
-    const yesterdaySchedule = await db.getSchedule(yesterday);
-
-    const dayAfterSchedule = new ScheduleDay({
-      date: dayAfter,
-      courts,
-    });
-
-    await dayAfterSchedule.save();
-    await yesterdaySchedule.remove();
-
-    return await db.getAllSchedues();
   } catch (err) {
     catchError(res, err);
   }

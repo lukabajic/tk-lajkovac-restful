@@ -13,6 +13,8 @@ router.get("/get", isAuth, scheduleDayController.getScheduleDay);
 
 router.get("/get-all", isAuth, scheduleDayController.getAllScheduleDays);
 
+router.get("/get-quick", isAuth, scheduleDayController.getQuickSchedule);
+
 router.post("/edit", isAuth, scheduleDayController.editDaySchedule);
 
 router.post(
