@@ -1,11 +1,11 @@
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcryptjs');
 
-const { throwError, catchError } = require("./utility/errors");
-const { userData } = require("./utility/userData");
-const db = require("./utility/db");
-const { sendVerificationMail, passwordMail } = require("./utility/sendgrid");
-const { getUserId } = require("./utility/jwt");
-const getDates = require("./utility/getDates");
+const { catchError } = require('./utility/errors');
+const { userData } = require('./utility/userData');
+const db = require('./utility/db');
+const { sendVerificationMail, passwordMail } = require('./utility/sendgrid');
+const { getUserId } = require('./utility/jwt');
+const getDates = require('./utility/getDates');
 
 const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
@@ -17,7 +17,7 @@ exports.getUser = async (req, res, next) => {
 
     res.status(200).json({
       statusCode: 200,
-      message: "Korisnik je uspešno pronadjen.",
+      message: 'Korisnik je uspešno pronadjen.',
       user: userData(user),
     });
   } catch (err) {
@@ -31,7 +31,26 @@ exports.getAllUsers = async (req, res, next) => {
 
     res.status(201).json({
       statusCode: 201,
-      message: "List svih korisnika je pronađena.",
+      message: 'List svih korisnika je pronađena.',
+      users: users.map((user) => userData(user)),
+    });
+  } catch (err) {
+    catchError(res, err);
+  }
+};
+
+exports.listUsers = async (req, res) => {
+  const { limit = 10, offset = 0 } = req.params;
+
+  try {
+    const users = await db.listUsers({
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+    });
+
+    res.status(201).json({
+      statusCode: 201,
+      message: 'List svih korisnika je pronađena.',
       users: users.map((user) => userData(user)),
     });
   } catch (err) {
@@ -46,13 +65,13 @@ exports.verifyUserEmail = async (req, res, next) => {
   try {
     const user = await db.getUser(userId);
 
-    user.emailVerified && res.render("verification-success", { already: true });
+    user.emailVerified && res.render('verification-success', { already: true });
 
     user.emailVerified = true;
 
     await user.save();
 
-    res.render("verification-success", { already: false });
+    res.render('verification-success', { already: false });
   } catch (err) {
     catchError(res, err);
   }
@@ -74,7 +93,7 @@ exports.resetPassword = async (req, res, next) => {
 
     res.status(200).json({
       statusCode: 200,
-      message: "Šifra uspešno promenjena.",
+      message: 'Šifra uspešno promenjena.',
     });
   } catch (err) {
     catchError(res, err);
@@ -88,7 +107,7 @@ exports.resendVerificationEmail = async (req, res, next) => {
     await sendVerificationMail(token, email);
     res.status(200).json({
       statusCode: 200,
-      message: "Email je uspešno poslat.",
+      message: 'Email je uspešno poslat.',
     });
   } catch (err) {
     catchError(res, err);
@@ -103,23 +122,23 @@ exports.updateUserData = async (req, res, next) => {
     const user = await db.getUser(userId);
 
     switch (action) {
-      case "SET_INITIAL_DATA":
+      case 'SET_INITIAL_DATA':
         user.data.displayName = payload.displayName;
         user.data.phone = payload.phone;
         break;
-      case "UPDATE_EMAIL":
+      case 'UPDATE_EMAIL':
         user.email = payload.email;
         user.emailVerified = false;
         await sendVerificationMail(token, payload.email);
         break;
-      case "UPDATE_PASSWORD":
+      case 'UPDATE_PASSWORD':
         const hashedPassword = await bcrypt.hash(payload.password, 12);
         user.password = hashedPassword;
         break;
-      case "UPDATE_NAME":
+      case 'UPDATE_NAME':
         user.data.displayName = payload.displayName;
         break;
-      case "UPDATE_PHONE":
+      case 'UPDATE_PHONE':
         user.data.phone = payload.phone;
         break;
       default:
@@ -130,7 +149,7 @@ exports.updateUserData = async (req, res, next) => {
 
     res.status(200).json({
       statusCode: 200,
-      message: "Podaci uspešno sačuvani.",
+      message: 'Podaci uspešno sačuvani.',
       user,
     });
   } catch (err) {
@@ -151,7 +170,7 @@ exports.deleteUser = async (req, res, next) => {
 
     res.status(200).json({
       statusCode: 200,
-      message: "Korisnik obrisan.",
+      message: 'Korisnik obrisan.',
     });
   } catch (err) {
     catchError(res, err);
@@ -170,27 +189,8 @@ exports.giveUserPremiumPermissions = async (req, res, next) => {
 
     res.status(200).json({
       statusCode: 200,
-      message: "Korisnik sada ima premium prava.",
+      message: 'Korisnik sada ima premium prava.',
     });
-  } catch (err) {
-    catchError(res, err);
-  }
-};
-
-// exports.cancelUserMatch = async (req, res, next) => {};
-
-exports.midnightUpdateUsers = async (req, res, next) => {
-  const { yesterday } = getDates();
-
-  try {
-    const users = await db.getUsers();
-
-    users.forEach(async (user) => {
-      user.schedule = user.schedule.filter((s) => s.date !== yesterday);
-      await user.save();
-    });
-
-    return users;
   } catch (err) {
     catchError(res, err);
   }

@@ -10,6 +10,8 @@ router.get("/get", isAuth, userController.getUser);
 
 router.get("/get-all", isAuth, userController.getAllUsers);
 
+router.get("/list-users/:limit/:offset", isAuth, userController.listUsers);
+
 router.get("/verify-email/:token", userController.verifyUserEmail);
 
 router.post("/resend", isAuth, userController.resendVerificationEmail);
