@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cron = require('node-cron');
 
 require('dotenv').config();
 
@@ -12,6 +13,8 @@ const leagueParticipantRoutes = require('./routes/leagueParticipant');
 const leagueDummyRoutes = require('./routes/leagueDummy');
 const scheduleDayRoutes = require('./routes/scheduleDay');
 const courtScheduleRoutes = require('./routes/courtSchedule');
+const { midnightUpdateSchedule } = require('./controllers/scheduleDay');
+const { midnightUpdateUsers } = require('./controllers/user');
 
 // where to run server
 const port = process.env.PORT || 8000;
@@ -21,7 +24,7 @@ const app = express();
 
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
+app.get('/', (_, res) => {
   res.render('index');
 });
 
@@ -73,5 +76,14 @@ mongoose
     io.on('connection', () => {
       process.env.CONFIG === 'dev' && console.log('Client connected.');
     });
+
+    cron.schedule(
+      '0 0 0 * * *',
+      () => {
+        midnightUpdateSchedule();
+        midnightUpdateUsers();
+      },
+      { timezone: 'Europe/Belgrade' }
+    );
   })
   .catch((err) => console.log(err));

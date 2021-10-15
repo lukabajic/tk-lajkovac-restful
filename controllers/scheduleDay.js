@@ -260,6 +260,25 @@ exports.deleteScheduleDay = async (req, res, next) => {
   }
 };
 
+exports.midnightUpdateSchedule = async () => {
+  const { yesterday, dayAfter } = getDates();
+
+  try {
+    const courts = await db.getAllCourts();
+    const yesterdaySchedule = await db.getSchedule(yesterday);
+
+    const dayAfterSchedule = new ScheduleDay({
+      date: dayAfter,
+      courts,
+    });
+
+    await dayAfterSchedule.save();
+    await yesterdaySchedule.remove();
+  } catch (err) {
+    console.warn(err);
+  }
+};
+
 // exports.getSchedule = async (req, res, next) => {
 //   try {
 //     const schedule = await Schedule.find();

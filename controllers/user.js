@@ -195,3 +195,39 @@ exports.giveUserPremiumPermissions = async (req, res, next) => {
     catchError(res, err);
   }
 };
+
+exports.emptyUsersSchedule = async () => {
+  try {
+    const users = await db.getUsers();
+
+    users.forEach(async (user) => {
+      user.schedule = [];
+      await user.save();
+    });
+
+    res.status(200).json({
+      statusCode: 200,
+      message: 'Ispražnjen korisnički raspored.',
+    });
+  } catch (err) {
+    catchError(res, err);
+  }
+};
+
+exports.midnightUpdateUsers = async () => {
+  const { yesterday } = getDates();
+
+  try {
+    const users = await db.getUsers();
+
+    users.forEach(async (user) => {
+      user.schedule = [];
+      user.schedule = user.schedule.filter((s) => s.date !== yesterday);
+      await user.save();
+    });
+
+    console.log('Users updated');
+  } catch (err) {
+    console.warn(err);
+  }
+};
