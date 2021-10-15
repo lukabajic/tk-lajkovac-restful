@@ -99,13 +99,20 @@ exports.getQuickSchedule = async (req, res, next) => {
           const minutes = new Date().getMinutes();
           const startMinute = Number(t.start.slice(2, 4));
 
-          if (minutes > startMinute) return;
+          if (minutes > startMinute + 30 * 60000) return;
         }
 
         if (hours > startHour) return;
 
-        t.court = c.number;
-        times.push(t);
+        times.push({
+          taken: t.taken,
+          userId: t.userId,
+          userName: t.userName,
+          _id: t._id,
+          start: t.start,
+          end: t.end,
+          court: c.number,
+        });
       })
     );
 
@@ -125,6 +132,7 @@ exports.getQuickSchedule = async (req, res, next) => {
       times: times.slice(0, 3),
     });
   } catch (err) {
+    console.log(err);
     catchError(res, err);
   }
 };
