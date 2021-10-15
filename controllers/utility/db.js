@@ -233,7 +233,9 @@ exports.getUsers = async () => {
 };
 
 exports.listUsers = async ({ limit, offset }) => {
-  const users = await User.find().skip(offset).limit(limit);
+  const users = await User.find({ emailVerified: true })
+    .skip(offset)
+    .limit(limit);
   !users && throwError('Došlo je do greške prilikom pretrage korisnika.', 404);
 
   return users;
