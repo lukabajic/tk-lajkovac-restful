@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
@@ -64,15 +64,23 @@ const userSchema = new Schema({
   data: {
     displayName: {
       type: String,
-      default: "",
+      default: '',
     },
     phone: {
       type: String,
-      default: "",
+      default: '',
     },
     isPremium: {
       type: Boolean,
       default: false,
+    },
+    avatarName: {
+      type: String,
+      default: '',
+    },
+    avatarUrl: {
+      type: String,
+      default: '',
     },
   },
   additionalData: {},
@@ -80,16 +88,16 @@ const userSchema = new Schema({
   league: {
     leagueName: {
       type: String,
-      default: "",
+      default: '',
     },
     groupName: {
       type: String,
-      default: "",
+      default: '',
     },
     fixtures: [fixturesSubSchema],
   },
 });
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;

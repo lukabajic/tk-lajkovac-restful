@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const cloudinary = require('cloudinary').v2;
 
 const { catchError } = require('./utility/errors');
 const { userData } = require('./utility/userData');
@@ -6,6 +7,12 @@ const db = require('./utility/db');
 const { sendVerificationMail, passwordMail } = require('./utility/sendgrid');
 const { getUserId } = require('./utility/jwt');
 const getDates = require('./utility/getDates');
+
+cloudinary.config({
+  cloud_name: 'drqml7o5d',
+  api_key: '773451592588417',
+  api_secret: 'At8W2Ca3PZ1j0duzExw9j4mpqxI',
+});
 
 const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
@@ -140,6 +147,16 @@ exports.updateUserData = async (req, res, next) => {
         break;
       case 'UPDATE_PHONE':
         user.data.phone = payload.phone;
+        break;
+      case 'UPDATE_PICTURE':
+        console.log(payload);
+        if (payload)
+          cloudinary.api.delete_resources(payload, () => {
+            console.log('[cloudinary] Old image deleted');
+          });
+
+        user.data.avatarName = req.file.filename;
+        user.data.avatarUrl = req.file.path;
         break;
       default:
         break;
