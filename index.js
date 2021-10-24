@@ -41,7 +41,7 @@ const options = {
 app.use(express.json());
 
 // CORS
-app.use((req, res, next) => {
+app.use((_, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
     'Access-Control-Allow-Methods',
