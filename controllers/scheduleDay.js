@@ -38,6 +38,57 @@ exports.createScheduleDay = async (req, res, next) => {
   }
 };
 
+const MONTHS = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
+const daysInMonth = (year, month) => new Date(year, month, 0).getDate();
+
+exports.createMonthlySchedule = async () => {
+  const now = new Date();
+
+  let lastMonth = new Date();
+  lastMonth.setMonth(now.getMonth() - 1);
+  const lastMonthNum = lastMonth.getMonth();
+
+  let nextMonth = new Date();
+  nextMonth.setMonth(now.getMonth() + 1);
+  const nextMonthNum = nextMonth.getMonth();
+
+  const lastMonthRegex = new RegExp(MONTHS[lastMonthNum], 'i');
+
+  try {
+    await ScheduleDay.deleteMany({ date: { $regex: lastMonthRegex } });
+
+    const courts = await db.getAllCourts();
+    const nrOfDays = daysInMonth(now.getFullYear(), nextMonthNum + 1);
+
+    for (let i = 1; i <= nrOfDays; i++) {
+      const date = new Date();
+      date.setMonth(nextMonthNum, i);
+
+      const scheduleDay = new ScheduleDay({
+        date: date.toDateString(),
+        courts,
+      });
+      await scheduleDay.save();
+    }
+  } catch (error) {
+    console.warn(error);
+  }
+};
+
 exports.getScheduleDay = async (req, res, next) => {
   const { day } = req.query;
 

@@ -1,31 +1,38 @@
-const express = require("express");
+const express = require('express');
 
-const scheduleDayController = require("../controllers/scheduleDay");
+const scheduleDayController = require('../controllers/scheduleDay');
 
-const isAuth = require("../middleware/isAuth");
-const isAdmin = require("../middleware/isAdmin");
+const isAuth = require('../middleware/isAuth');
+const isAdmin = require('../middleware/isAdmin');
 
 const router = express.Router();
 
-router.put("/create", isAuth, isAdmin, scheduleDayController.createScheduleDay);
+router.put('/create', isAuth, isAdmin, scheduleDayController.createScheduleDay);
 
-router.get("/get", isAuth, scheduleDayController.getScheduleDay);
+router.put(
+  '/create-monthly',
+  isAuth,
+  isAdmin,
+  scheduleDayController.createMonthlySchedule
+);
 
-router.get("/get-all", isAuth, scheduleDayController.getAllScheduleDays);
+router.get('/get', isAuth, scheduleDayController.getScheduleDay);
 
-router.get("/get-quick", isAuth, scheduleDayController.getQuickSchedule);
+router.get('/get-all', isAuth, scheduleDayController.getAllScheduleDays);
 
-router.post("/edit", isAuth, scheduleDayController.editDaySchedule);
+router.get('/get-quick', isAuth, scheduleDayController.getQuickSchedule);
+``
+router.post('/edit', isAuth, scheduleDayController.editDaySchedule);
 
 router.post(
-  "/edit-admin",
+  '/edit-admin',
   isAuth,
   isAdmin,
   scheduleDayController.adminEditSchedule
 );
 
 router.delete(
-  "/delete",
+  '/delete',
   isAuth,
   isAdmin,
   scheduleDayController.deleteScheduleDay

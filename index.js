@@ -13,8 +13,7 @@ const leagueParticipantRoutes = require('./routes/leagueParticipant');
 const leagueDummyRoutes = require('./routes/leagueDummy');
 const scheduleDayRoutes = require('./routes/scheduleDay');
 const courtScheduleRoutes = require('./routes/courtSchedule');
-const { midnightUpdateSchedule } = require('./controllers/scheduleDay');
-const { midnightUpdateUsers } = require('./controllers/user');
+const { createMonthlySchedule } = require('./controllers/scheduleDay');
 
 // where to run server
 const port = process.env.PORT || 8000;
@@ -78,12 +77,14 @@ mongoose
     });
 
     cron.schedule(
-      '0 0 0 * * *',
+      '00 12 25 * *',
       () => {
-        midnightUpdateSchedule();
-        midnightUpdateUsers();
+        createMonthlySchedule();
       },
-      { timezone: 'Europe/Belgrade' }
+      {
+        scheduled: true,
+        timezone: 'Europe/Belgrade',
+      }
     );
   })
   .catch((err) => console.log(err));

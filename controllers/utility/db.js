@@ -7,6 +7,7 @@ const ScheduleDay = require('../../models/scheduleDay');
 const CourtSchedule = require('../../models/courtSchedule');
 
 const { throwError } = require('./errors');
+const getDates = require('./getDates');
 
 exports.allGroupMatches = (participants) => {
   const fixtures = [];
@@ -137,7 +138,11 @@ exports.getSchedule = async (date) => {
 };
 
 exports.getAllSchedues = async () => {
-  const scheduleDays = await ScheduleDay.find();
+  const dates = getDates();
+
+  const scheduleDays = await ScheduleDay.find({
+    date: [dates.today, dates.tomorrow, dates.dayAfter],
+  });
   !scheduleDays && throwError(`Raspored ne postoji.`, 404);
 
   return scheduleDays;

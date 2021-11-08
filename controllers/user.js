@@ -149,7 +149,6 @@ exports.updateUserData = async (req, res, next) => {
         user.data.phone = payload.phone;
         break;
       case 'UPDATE_PICTURE':
-        console.log(payload);
         if (payload)
           cloudinary.api.delete_resources(payload, () => {
             console.log('[cloudinary] Old image deleted');
