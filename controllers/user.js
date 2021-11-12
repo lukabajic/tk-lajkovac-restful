@@ -231,17 +231,18 @@ exports.emptyUsersSchedule = async () => {
 };
 
 exports.midnightUpdateUsers = async () => {
-  const { yesterday } = getDates();
-
   try {
     const users = await db.getUsers();
 
-    users.forEach(async (user) => {
-      user.schedule = [];
-      user.schedule = user.schedule.filter((s) => s.date !== yesterday);
-      await user.save();
-    });
+    for (const u of users) {
+      u.schedule = u.schedule.filter((s) => {
+        const thisMonth = new Date().getMonth();
+        const scheduleMonth = new Date(s.date).getMonth();
+        return scheduleMonth >= thisMonth;
+      });
 
+      await u.save();
+    }
     console.log('Users updated');
   } catch (err) {
     console.warn(err);

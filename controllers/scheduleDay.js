@@ -150,7 +150,7 @@ exports.getQuickSchedule = async (req, res, next) => {
           const minutes = new Date().getMinutes();
           const startMinute = Number(t.start.slice(2, 4));
 
-          if (minutes > startMinute + 30 * 60000) return;
+          if (minutes > startMinute + 30) return;
         }
 
         if (hours > startHour) return;

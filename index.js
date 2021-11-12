@@ -14,6 +14,7 @@ const leagueDummyRoutes = require('./routes/leagueDummy');
 const scheduleDayRoutes = require('./routes/scheduleDay');
 const courtScheduleRoutes = require('./routes/courtSchedule');
 const { createMonthlySchedule } = require('./controllers/scheduleDay');
+const { midnightUpdateUsers } = require('./controllers/user');
 
 // where to run server
 const port = process.env.PORT || 8000;
@@ -80,6 +81,7 @@ mongoose
       '00 12 25 * *',
       () => {
         createMonthlySchedule();
+        midnightUpdateUsers();
       },
       {
         scheduled: true,
